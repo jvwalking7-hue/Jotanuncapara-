@@ -73,11 +73,11 @@ const IconValid = <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strok
 const IconRobot = <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h2v2H9V9zm4 0h2v2h-2V9z" /></svg>;
 
 const OBJETIVOS = [
-  { value: "OUTCOME_SALES", label: "Vendas", icon: IconSales },
-  { value: "OUTCOME_TRAFFIC", label: "Tráfego", icon: IconTraffic },
-  { value: "OUTCOME_LEADS", label: "Leads", icon: IconLeads },
-  { value: "OUTCOME_ENGAGEMENT", label: "Engajamento", icon: IconEngage },
-  { value: "OUTCOME_AWARENESS", label: "Alcance", icon: IconBrand },
+  { value: "OUTCOME_SALES", label: "Vendas", icon: <img src="/VENDAS.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
+  { value: "OUTCOME_TRAFFIC", label: "Tráfego", icon: <img src="/TRAFEGO.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
+  { value: "OUTCOME_LEADS", label: "Leads", icon: <img src="/LEADS.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
+  { value: "OUTCOME_ENGAGEMENT", label: "Engajamento", icon: <img src="/engajamento.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
+  { value: "OUTCOME_AWARENESS", label: "Alcance", icon: <img src="/ALCANCE.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
 ];
 
 const ESTRATEGIAS_LANCE = [
