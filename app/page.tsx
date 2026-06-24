@@ -116,7 +116,7 @@ function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange
         <p className="text-sm font-bold text-gray-900">{label}</p>
         {desc && <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{desc}</p>}
       </div>
-      <button type="button" aria-pressed={enabled} className={`relative w-12 h-6 rounded-full shrink-0 transition-all duration-300 focus:outline-none border-2 ${enabled ? 'bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.5)] border-transparent' : 'bg-gray-100 border-gray-200'}`}>
+      <button type="button" aria-pressed={enabled} className={`relative w-12 h-6 rounded-full shrink-0 transition-all duration-300 focus:outline-none border-2 ${enabled ? 'bg-gradient-to-r from-blue-500 to-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.5)] border-transparent' : 'bg-gray-100 border-gray-200'}`}>
         <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-300 ${enabled ? 'translate-x-6' : 'translate-x-0'}`} />
       </button>
     </div>
@@ -125,7 +125,7 @@ function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange
 
 function MetricCard({ label, value, accent = "red", sub }: { label: string; value: string | number; accent?: "red" | "purple" | "blue" | "green"; sub?: string }) {
   const ring: Record<string, string> = {
-    red:    "from-rose-500/10 to-transparent text-rose-500 border-rose-500/20 hover:border-rose-500/40",
+    red:    "from-blue-500/10 to-transparent text-blue-500 border-blue-500/20 hover:border-blue-500/40",
     purple: "from-purple-500/10 to-transparent text-purple-400 border-purple-500/20 hover:border-purple-500/40",
     blue:   "from-sky-500/10 to-transparent text-sky-400 border-sky-500/20 hover:border-sky-500/40",
     green:  "from-emerald-500/10 to-transparent text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40",
@@ -146,19 +146,19 @@ function MetricCard({ label, value, accent = "red", sub }: { label: string; valu
 function SectionStep({ num, title, tooltip, children }: { num: string; title: string; tooltip?: string; children: React.ReactNode }) {
   return (
     <div className="relative pl-10 sm:pl-12 pb-8 border-l border-gray-200 last:border-transparent last:pb-0 animate-fade-in">
-      <div className="absolute left-[-14px] top-0 w-7 h-7 rounded-full bg-white border-2 border-rose-500 flex items-center justify-center text-xs font-black text-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]">{num}</div>
+      <div className="absolute left-[-14px] top-0 w-7 h-7 rounded-full bg-white border-2 border-blue-500 flex items-center justify-center text-xs font-black text-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]">{num}</div>
       <div className="flex flex-col xl:flex-row gap-5 items-start">
         <div className="flex-1 w-full space-y-4">
           <h3 className="text-lg font-black uppercase tracking-widest text-gray-900 whitespace-nowrap">{title}</h3>
           {children}
         </div>
         {tooltip && (
-          <div className="w-full xl:w-[280px] shrink-0 p-2 rounded-xl border border-rose-500/10 bg-white shadow-sm relative overflow-hidden group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-rose-500 opacity-60 shadow-[0_0_10px_rgba(244,63,94,0.6)]"></div>
+          <div className="w-full xl:w-[280px] shrink-0 p-2 rounded-xl border border-blue-500/10 bg-white shadow-sm relative overflow-hidden group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-60 shadow-[0_0_10px_rgba(59,130,246,0.6)]"></div>
             <div className="flex items-start gap-3">
-              <svg className="w-5 h-5 shrink-0 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <svg className="w-5 h-5 shrink-0 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <div>
-                <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">Dica do Sistema</p>
+                <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-1">Dica do Sistema</p>
                 <p className="text-xs text-gray-700 font-medium leading-relaxed">{tooltip}</p>
               </div>
             </div>
@@ -188,7 +188,7 @@ function StatusIndicator({ status }: { status: FacebookObject['status'] }) {
     }
     return (
         <div className="flex items-center gap-2 text-xs text-gray-400 font-black uppercase tracking-wider">
-            <span className="h-3 w-3 rounded-full bg-zinc-700 border border-black"></span>
+            <span className="h-3 w-3 rounded-full bg-slate-700 border border-black"></span>
             {status === 'PAUSED' ? 'Pausada' : status === 'ARCHIVED' ? 'Arquivada' : 'Deletada'}
         </div>
     );
@@ -204,18 +204,18 @@ function LandingPage() {
   }, []);
 
   return (
-    <div className="bg-gray-50 text-gray-900 min-h-screen font-sans overflow-x-hidden selection:bg-rose-500/30 relative">
+    <div className="bg-gray-50 text-gray-900 min-h-screen font-sans overflow-x-hidden selection:bg-blue-500/30 relative">
       {/* Dynamic Background mesh glows */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-rose-600/5 rounded-full blur-[180px] animate-float" />
+        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[180px] animate-float" />
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[150px] animate-float-delayed" />
       </div>
 
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-gray-50/80 backdrop-blur-xl border-b border-gray-200 shadow-2xl" : "bg-transparent"}`}>
         <div className="w-full max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-          <span className="text-sm font-black tracking-widest text-gray-900">AUTO<span className="text-rose-500">ADS</span></span>
+          <span className="text-sm font-black tracking-widest text-gray-900">AUTO<span className="text-blue-500">ADS</span></span>
           <button onClick={() => signIn("facebook", { callbackUrl: "/workspaces" })}
-            className="magnetic-btn bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-gray-900 text-sm font-bold px-8 py-3.5 rounded-2xl transition-all shadow-[0_0_30px_rgba(244,63,94,0.3)] uppercase tracking-widest">
+            className="magnetic-btn bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 text-sm font-bold px-8 py-3.5 rounded-2xl transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] uppercase tracking-widest">
             Entrar no Painel
           </button>
         </div>
@@ -225,7 +225,7 @@ function LandingPage() {
         <div className="relative max-w-5xl mx-auto animate-slide-up">
           <h1 className="text-5xl md:text-8xl font-black leading-[1.05] tracking-tight mb-8">
             Lance 100<br />campanhas<br />
-            <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(244,63,94,0.2)]">
+            <span className="bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(59,130,246,0.2)]">
               em segundos.
             </span>
           </h1>
@@ -233,7 +233,7 @@ function LandingPage() {
             A plataforma de automação de anúncios definitiva. Escale seu tráfego através da Meta API com a interface Antigravity de alto nível.
           </p>
           <button onClick={() => signIn("facebook", { callbackUrl: "/workspaces" })}
-            className="magnetic-btn w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-gray-900 font-bold text-sm px-12 py-5 rounded-2xl transition-all shadow-[0_0_40px_rgba(244,63,94,0.4)] uppercase tracking-widest">
+            className="magnetic-btn w-full sm:w-auto bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 font-bold text-sm px-12 py-5 rounded-2xl transition-all shadow-[0_0_40px_rgba(59,130,246,0.4)] uppercase tracking-widest">
             Conectar com Facebook
           </button>
         </div>
@@ -766,13 +766,13 @@ export default function Home() {
   };
 
   // INPUT PREMIUM AESTHETICS
-  const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner";
+  const inputClass = "w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner";
 
   if (status === "loading") {
     return (
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="relative flex items-center justify-center">
-          <div className="w-16 h-16 border-[4px] border-rose-500 border-t-transparent rounded-full animate-spin" />
+          <div className="w-16 h-16 border-[4px] border-blue-500 border-t-transparent rounded-full animate-spin" />
           <div className="absolute w-20 h-20 border border-purple-500/30 rounded-full animate-pulse-slow" />
         </div>
       </div>
@@ -784,15 +784,15 @@ export default function Home() {
     <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden relative">
       {/* Floating neon blobs in background */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-rose-600/[0.03] rounded-full blur-[250px] animate-float" />
+        <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/[0.03] rounded-full blur-[250px] animate-float" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-purple-600/[0.03] rounded-full blur-[250px] animate-float-delayed" />
       </div>
 
       {/* BARRA LATERAL ANTIGRAVITY */}
-      <aside className="w-[340px] bg-[#16181D] backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
+      <aside className="w-[340px] bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
         <div className="h-24 flex items-center px-8 border-b border-white/5">
-          <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-rose-500">ADS</span></span>
-          <span className="ml-3 text-[9px] font-bold tracking-widest bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-0.5 rounded-full uppercase">
+          <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-blue-500">ADS</span></span>
+          <span className="ml-3 text-[9px] font-bold tracking-widest bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase">
             v2.0
           </span>
         </div>
@@ -800,35 +800,35 @@ export default function Home() {
         {/* Navigation Menu containing EXCLUSIVELY the 4 required options */}
         <nav className="flex-1 px-4 py-8 space-y-2.5">
           <button onClick={() => setAbaAtiva('workspaces')} 
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconWorkspace} Workspace
           </button>
           
           <button onClick={() => setAbaAtiva('gestao')} 
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconManager} Gerenciador de Campanha
           </button>
 
           <button onClick={() => setAbaAtiva('lancador')} 
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconCreator} Lançador em Massa
           </button>
 
           <button onClick={() => setAbaAtiva('biblioteca')} 
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconFolder} Cofre de Criativo
           </button>
         </nav>
 
-        <div className="p-3 border-t border-white/5 bg-zinc-950/20">
+        <div className="p-3 border-t border-white/5 bg-slate-950/20">
           <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/[0.02] border border-white/5">
-            <img src={session.user?.image || ""} alt="Perfil" className="w-12 h-12 rounded-full ring-2 ring-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.2)]" />
+            <img src={session.user?.image || ""} alt="Perfil" className="w-12 h-12 rounded-full ring-2 ring-blue-500/40 shadow-[0_0_10px_rgba(59,130,246,0.2)]" />
             <div className="min-w-0">
               <p className="text-sm font-bold truncate text-white">{session.user?.name}</p>
-              <p className="text-[11px] text-zinc-500 truncate font-mono">{session.user?.email}</p>
+              <p className="text-[11px] text-slate-500 truncate font-mono">{session.user?.email}</p>
             </div>
           </div>
-          <button onClick={() => signOut()} className="magnetic-btn mt-4 w-full text-xs font-bold text-zinc-500 hover:text-rose-400 py-3 transition-colors uppercase tracking-widest border border-white/5 rounded-xl hover:bg-rose-500/5">
+          <button onClick={() => signOut()} className="magnetic-btn mt-4 w-full text-xs font-bold text-slate-500 hover:text-blue-400 py-3 transition-colors uppercase tracking-widest border border-white/5 rounded-xl hover:bg-blue-500/5">
             Desconectar
           </button>
         </div>
@@ -850,7 +850,7 @@ export default function Home() {
           
           <div className="flex items-center gap-2">
             {wsAtivo && (
-              <div className="flex items-center gap-3 bg-gray-50 border border-rose-500/20 px-5 py-2.5 rounded-full shadow-sm">
+              <div className="flex items-center gap-3 bg-gray-50 border border-blue-500/20 px-5 py-2.5 rounded-full shadow-sm">
                 <span className={`w-2 h-2 rounded-full ${wsAtivo.status === 'validada' ? 'bg-emerald-500' : 'bg-yellow-500'}`} />
                 <span className="text-xs font-black text-gray-900 uppercase tracking-widest">{wsAtivo.nomeOferta}</span>
               </div>
@@ -875,11 +875,11 @@ export default function Home() {
                     <div className="flex flex-col items-center gap-2">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black border transition-all duration-500 ${
                         passoAtual > num ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                        : passoAtual === num ? 'bg-rose-600 border-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] scale-105'
+                        : passoAtual === num ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] scale-105'
                         : 'bg-gray-100 border-gray-200 text-gray-400'}`}>
                         {passoAtual > num ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7"/></svg> : <span>{passoIcones[idx]}</span>}
                       </div>
-                      <span className={`text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${passoAtual === num ? 'text-rose-500' : passoAtual > num ? 'text-emerald-400' : 'text-gray-400'}`}>{passoLabels[idx]}</span>
+                      <span className={`text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${passoAtual === num ? 'text-blue-500' : passoAtual > num ? 'text-emerald-400' : 'text-gray-400'}`}>{passoLabels[idx]}</span>
                     </div>
                     {idx < 5 && <div className={`flex-1 h-0.5 mx-4 mb-4 rounded-full transition-all duration-700 ${passoAtual > num ? 'bg-emerald-500/40' : 'bg-gray-100'}`}/>}
                   </div>
@@ -897,11 +897,11 @@ export default function Home() {
                     <SectionStep num="1" title="Seleção Multi-Contas" tooltip="Selecione as Business Managers e as contas de anúncio onde as campanhas serão criadas.">
                       <div className="bg-white shadow-sm border border-gray-200 rounded-2xl p-2 shadow-inner">
                         <div className="flex items-center justify-between mb-6">
-                          <label className="text-sm font-black text-gray-500 uppercase tracking-widest">Business Managers <span className="text-rose-500">*</span></label>
-                          {casSelecionadas.length > 0 && <span className="text-[10px] bg-rose-500/10 text-rose-500 border border-rose-500/25 px-4 py-1.5 rounded-full font-black font-mono shadow-[0_0_15px_rgba(244,63,94,0.15)]">{casSelecionadas.length} CA SELECIONADA(S)</span>}
+                          <label className="text-sm font-black text-gray-500 uppercase tracking-widest">Business Managers <span className="text-blue-500">*</span></label>
+                          {casSelecionadas.length > 0 && <span className="text-[10px] bg-blue-500/10 text-blue-500 border border-blue-500/25 px-4 py-1.5 rounded-full font-black font-mono shadow-[0_0_15px_rgba(59,130,246,0.15)]">{casSelecionadas.length} CA SELECIONADA(S)</span>}
                         </div>
                         {carregandoBMs ? (
-                          <div className="flex items-center justify-center py-12 text-gray-500 text-sm font-bold gap-2"><div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"/>Sincronizando com a Meta API...</div>
+                          <div className="flex items-center justify-center py-12 text-gray-500 text-sm font-bold gap-2"><div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"/>Sincronizando com a Meta API...</div>
                         ) : (
                           <div className="max-h-[400px] overflow-y-auto custom-scrollbar pr-3 space-y-4">
                             {bms.map(bm => (
@@ -918,12 +918,12 @@ export default function Home() {
                                     {bm.contas.map((ca: any) => {
                                       const selecionada = casSelecionadas.find(c => c.caId === ca.id);
                                       return (
-                                        <div key={ca.id} className={`rounded-xl border transition-all ${selecionada ? 'border-rose-500/40 bg-rose-500/[0.03]' : 'border-transparent hover:bg-gray-50'}`}>
+                                        <div key={ca.id} className={`rounded-xl border transition-all ${selecionada ? 'border-blue-500/40 bg-blue-500/[0.03]' : 'border-transparent hover:bg-gray-50'}`}>
                                           <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-2 px-3 py-2 text-left">
-                                            <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${selecionada ? 'bg-rose-500 border-rose-500' : 'border-zinc-700 bg-black/40'}`}>
+                                            <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${selecionada ? 'bg-blue-500 border-blue-500' : 'border-slate-700 bg-slate-950/40'}`}>
                                               {selecionada && <svg className="w-3.5 h-3.5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7"/></svg>}
                                             </div>
-                                            <div className="flex-1 min-w-0"><p className={`text-sm font-bold truncate ${selecionada ? 'text-rose-400' : 'text-gray-700'}`}>{ca.name}</p></div>
+                                            <div className="flex-1 min-w-0"><p className={`text-sm font-bold truncate ${selecionada ? 'text-blue-400' : 'text-gray-700'}`}>{ca.name}</p></div>
                                           </button>
                                           {selecionada && ca.paginas?.length > 0 && (
                                             <div className="px-6 pb-4 ml-8">
@@ -959,8 +959,8 @@ export default function Home() {
                         <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className={inputClass}/>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                           {OBJETIVOS.map(obj => (
-                            <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-rose-500/5 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.1)]' : 'bg-white border-gray-200 hover:border-gray-200'}`}>
-                              <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-rose-500 text-white' : 'bg-white shadow-sm text-gray-500'}`}>{obj.icon}</div>
+                            <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-blue-500/5 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-white border-gray-200 hover:border-gray-200'}`}>
+                              <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-blue-500 text-white' : 'bg-white shadow-sm text-gray-500'}`}>{obj.icon}</div>
                               <p className={`text-[10px] font-black tracking-widest uppercase text-center ${objetivo === obj.value ? 'text-gray-900' : 'text-gray-500'}`}>{obj.label}</p>
                             </button>
                           ))}
@@ -981,7 +981,7 @@ export default function Home() {
                               <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} className={`${inputClass} font-mono text-center text-sm`}/>
                               <button type="button" onClick={() => setOrcamento(String(Number(orcamento) + 10))} className="px-6 py-4 bg-gray-100 border border-gray-200 rounded-xl text-base font-black text-gray-900 hover:bg-gray-100">+</button>
                             </div>
-                            <input type="range" min="10" max="1000" step="10" value={orcamento} onChange={e => setOrcamento(e.target.value)} className="w-full h-2 bg-zinc-900 rounded-full appearance-none accent-rose-500"/>
+                            <input type="range" min="10" max="1000" step="10" value={orcamento} onChange={e => setOrcamento(e.target.value)} className="w-full h-2 bg-slate-900 rounded-full appearance-none accent-blue-500"/>
                           </div>
                         </div>
                       </div>
@@ -1058,7 +1058,7 @@ export default function Home() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="bg-white shadow-sm border border-gray-200 p-3 rounded-3xl shadow-inner">
                           <label className="text-sm font-black text-gray-500 uppercase tracking-widest mb-3 block">ID do Pixel Meta</label>
-                          <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className={`${inputClass} font-mono text-rose-400`} />
+                          <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className={`${inputClass} font-mono text-blue-400`} />
                         </div>
                         <div className="bg-white shadow-sm border border-gray-200 p-3 rounded-3xl shadow-inner">
                           <label className="text-sm font-black text-gray-500 uppercase tracking-widest mb-3 block">Parâmetros UTM (Sem o ?)</label>
@@ -1099,7 +1099,7 @@ export default function Home() {
                     <SectionStep num="2" title="Localização Geográfica (Países)">
                       <div className="bg-white shadow-sm p-2 rounded-2xl border border-gray-200 shadow-inner flex flex-wrap gap-3">
                         {PAISES_POPULARES.map(p => (
-                          <button key={p.value} onClick={() => togglePais(p.value)} className={`px-6 py-3.5 rounded-xl border text-sm font-black transition-all ${paises.includes(p.value) ? 'bg-rose-500/10 border-rose-500 text-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.15)] scale-105' : 'bg-white border-gray-200 text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}>
+                          <button key={p.value} onClick={() => togglePais(p.value)} className={`px-6 py-3.5 rounded-xl border text-sm font-black transition-all ${paises.includes(p.value) ? 'bg-blue-500/10 border-blue-500 text-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.15)] scale-105' : 'bg-white border-gray-200 text-gray-500 hover:text-gray-700 hover:border-gray-200'}`}>
                             {p.label}
                           </button>
                         ))}
@@ -1137,18 +1137,18 @@ export default function Home() {
                         <div className="bg-white shadow-sm border border-gray-200 rounded-2xl p-2 shadow-inner">
                             <label className="text-sm font-black text-gray-500 uppercase tracking-widest mb-4 block">Como vamos batizar os Anúncios?</label>
                             <div className="flex flex-col sm:flex-row gap-2">
-                                <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'arquivo' ? 'bg-rose-500/5 border-rose-500 shadow-inner' : 'bg-white shadow-sm border-gray-200 hover:border-gray-200'}`}>
+                                <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'arquivo' ? 'bg-blue-500/5 border-blue-500 shadow-inner' : 'bg-white shadow-sm border-gray-200 hover:border-gray-200'}`}>
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-rose-500' : 'border-zinc-700'}`}>
-                                            {regraNomeacao === 'arquivo' && <div className="w-2.5 h-2.5 bg-rose-500 rounded-full" />}
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-blue-500' : 'border-slate-700'}`}>
+                                            {regraNomeacao === 'arquivo' && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />}
                                         </div>
-                                        <span className={`text-base font-black uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-rose-500' : 'text-gray-500'}`}>1. Nome do Arquivo</span>
+                                        <span className={`text-base font-black uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-blue-500' : 'text-gray-500'}`}>1. Nome do Arquivo</span>
                                     </div>
                                     <span className="text-xs text-gray-500 font-bold uppercase ml-8">Ex: &quot;video_venda_final.mp4&quot;</span>
                                 </button>
                                 <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-3 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'sistema' ? 'bg-blue-500/5 border-blue-500 shadow-inner' : 'bg-white shadow-sm border-gray-200 hover:border-gray-200'}`}>
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-500' : 'border-zinc-700'}`}>
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-500' : 'border-slate-700'}`}>
                                             {regraNomeacao === 'sistema' && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />}
                                         </div>
                                         <span className={`text-base font-black uppercase tracking-widest ${regraNomeacao === 'sistema' ? 'text-blue-400' : 'text-gray-500'}`}>2. Padrão do Sistema</span>
@@ -1205,7 +1205,7 @@ export default function Home() {
                                 <div className="flex-1 relative group cursor-pointer">
                                     <input type="file" multiple accept="image/*,video/*" onChange={handleImagens} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
                                     <div className="w-full h-full py-8 bg-white shadow-sm hover:bg-white border border-gray-200 hover:border-gray-300 rounded-3xl flex items-center justify-center gap-2 transition-all">
-                                        <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-gray-500 group-hover:bg-zinc-700 transition-all duration-300">
+                                        <div className="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-gray-500 group-hover:bg-slate-700 transition-all duration-300">
                                             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                         </div>
                                         <div className="text-left">
@@ -1229,7 +1229,7 @@ export default function Home() {
                                                 )}
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
                                                 <span className="absolute bottom-2 left-2 right-2 text-[10px] font-mono text-gray-700 truncate z-10">{file.name}</span>
-                                                <button onClick={() => removerImagem(idx)} className="absolute top-2 right-2 w-7 h-7 bg-rose-600 text-gray-900 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-xs">✕</button>
+                                                <button onClick={() => removerImagem(idx)} className="absolute top-2 right-2 w-7 h-7 bg-blue-600 text-gray-900 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-xs">✕</button>
                                             </div>
                                         ))}
                                     </div>
@@ -1244,24 +1244,24 @@ export default function Home() {
                   <div className="m-6 p-3 bg-white shadow-sm border border-gray-200 rounded-3xl shadow-2xl animate-slide-up">
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-sm font-black uppercase text-gray-900 flex items-center gap-3">
-                        {lancando && <span className="w-3 h-3 rounded-full bg-rose-500 animate-pulse"/>}
+                        {lancando && <span className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"/>}
                         {concluido ? "Disparo Concluído" : "Processando..."}
                       </span>
-                      <span className="text-3xl font-black font-mono text-rose-500">{progresso}%</span>
+                      <span className="text-3xl font-black font-mono text-blue-500">{progresso}%</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-3 mb-6 overflow-hidden border border-gray-200">
-                      <div className="h-full bg-gradient-to-r from-rose-500 to-rose-600 transition-all duration-300" style={{ width: `${progresso}%` }} />
+                      <div className="h-full bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-300" style={{ width: `${progresso}%` }} />
                     </div>
                     <div ref={logRef} className="bg-gray-900/60 border border-gray-200 rounded-2xl p-3 h-60 overflow-y-auto space-y-2 font-mono text-xs text-gray-500 shadow-inner scroll-smooth custom-scrollbar">
-                      {logItems.map((item, i) => ( <div key={i} className={item.tipo === "erro" ? "text-rose-500 font-bold" : ""}><span className="mr-2 text-rose-500">&gt;&gt;</span>{item.mensagem}</div> ))}
+                      {logItems.map((item, i) => ( <div key={i} className={item.tipo === "erro" ? "text-blue-500 font-bold" : ""}><span className="mr-2 text-blue-500">&gt;&gt;</span>{item.mensagem}</div> ))}
                     </div>
                   </div>
                 )}
 
                 <div className="px-8 py-6 border-t border-gray-200 bg-gray-50/20 flex items-center justify-between">
                   {passoAtual > 1 ? ( <button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="magnetic-btn px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-gray-900 text-sm font-bold uppercase tracking-widest transition-all">← Voltar</button> ) : <div/>}
-                  {passoAtual < TOTAL_PASSOS ? ( <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-4 py-2 bg-white text-black hover:bg-zinc-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button> ) : (
-                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="magnetic-btn px-4 py-2 bg-gradient-to-r text-sm text-white from-rose-600 to-rose-700 disabled:opacity-30 text-gray-900 rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all flex items-center gap-3">
+                  {passoAtual < TOTAL_PASSOS ? ( <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-4 py-2 bg-white text-black hover:bg-slate-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button> ) : (
+                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="magnetic-btn px-4 py-2 bg-gradient-to-r text-sm text-white from-blue-600 to-blue-700 disabled:opacity-30 text-gray-900 rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-3">
                       {lancando ? "Executando..." : "Disparar Armamento"}
                     </button>
                   )}
@@ -1320,7 +1320,7 @@ export default function Home() {
                                 {gestaoCampanhaAtiva && (
                                     <>
                                         <span className="text-gray-600">/</span>
-                                        <span onClick={() => { setGestaoNivel('conjuntos'); setGestaoConjuntoAtivo(null); }} className={`uppercase cursor-pointer transition-colors ${gestaoNivel === 'conjuntos' ? 'text-rose-500' : 'text-gray-500 hover:text-gray-900'}`}>
+                                        <span onClick={() => { setGestaoNivel('conjuntos'); setGestaoConjuntoAtivo(null); }} className={`uppercase cursor-pointer transition-colors ${gestaoNivel === 'conjuntos' ? 'text-blue-500' : 'text-gray-500 hover:text-gray-900'}`}>
                                             {gestaoCampanhaAtiva.name}
                                         </span>
                                     </>
@@ -1329,13 +1329,13 @@ export default function Home() {
                                 {gestaoConjuntoAtivo && (
                                     <>
                                         <span className="text-gray-600">/</span>
-                                        <span className="text-rose-500 uppercase">{gestaoConjuntoAtivo.name}</span>
+                                        <span className="text-blue-500 uppercase">{gestaoConjuntoAtivo.name}</span>
                                     </>
                                 )}
                             </div>
 
                             <div className="flex items-center gap-6 text-sm font-black uppercase tracking-widest">
-                                <button onClick={() => { setGestaoNivel('campanhas'); setGestaoCampanhaAtiva(null); setGestaoConjuntoAtivo(null); }} className={`pb-3 border-b-2 transition-all ${gestaoNivel === 'campanhas' ? 'border-rose-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Campanhas</button>
+                                <button onClick={() => { setGestaoNivel('campanhas'); setGestaoCampanhaAtiva(null); setGestaoConjuntoAtivo(null); }} className={`pb-3 border-b-2 transition-all ${gestaoNivel === 'campanhas' ? 'border-blue-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'}`}>Campanhas</button>
                                 <button onClick={() => { if(gestaoCampanhaAtiva) { setGestaoNivel('conjuntos'); setGestaoConjuntoAtivo(null); } }} className={`pb-3 border-b-2 transition-all ${gestaoNivel === 'conjuntos' ? 'border-purple-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'} ${!gestaoCampanhaAtiva ? 'opacity-30 cursor-not-allowed' : ''}`}>Conjuntos</button>
                                 <button onClick={() => { if(gestaoConjuntoAtivo) setGestaoNivel('anuncios'); }} className={`pb-3 border-b-2 transition-all ${gestaoNivel === 'anuncios' ? 'border-blue-600 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700'} ${!gestaoConjuntoAtivo ? 'opacity-30 cursor-not-allowed' : ''}`}>Anúncios</button>
                             </div>
@@ -1344,8 +1344,8 @@ export default function Home() {
                         <div className="relative mb-1" ref={dropdownRef}>
                             <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center justify-between gap-4 bg-white shadow-sm border border-gray-200 hover:border-gray-300 p-2 rounded-xl shadow-inner min-w-[280px] transition-all">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
-                                        <span className="text-[10px] font-black text-rose-500">CA</span>
+                                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0 border border-blue-500/20">
+                                        <span className="text-[10px] font-black text-blue-500">CA</span>
                                     </div>
                                     <div className="text-left">
                                         <p className="text-xs font-black text-gray-900 uppercase tracking-widest">
@@ -1369,8 +1369,8 @@ export default function Home() {
                                                 {bm.contas.map((ca:any) => {
                                                     const isSelected = activeAdAccounts.some(acc => acc.caId === ca.id);
                                                     return (
-                                                        <button key={ca.id} onClick={() => toggleGestaoAccount({ caId: ca.id, caName: ca.name, bmName: bm.name, bmId: bm.id, paginaId: "" })} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all ${isSelected ? 'bg-rose-500/10' : 'hover:bg-gray-50'}`}>
-                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-rose-600 border-rose-500' : 'border-zinc-700 bg-black/40'}`}>
+                                                        <button key={ca.id} onClick={() => toggleGestaoAccount({ caId: ca.id, caName: ca.name, bmName: bm.name, bmId: bm.id, paginaId: "" })} className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all ${isSelected ? 'bg-blue-500/10' : 'hover:bg-gray-50'}`}>
+                                                            <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${isSelected ? 'bg-blue-600 border-blue-500' : 'border-slate-700 bg-slate-950/40'}`}>
                                                                 {isSelected && <svg className="w-3 h-3 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>}
                                                             </div>
                                                             <div className="text-left truncate">
@@ -1396,8 +1396,8 @@ export default function Home() {
                     <div className="flex-1 overflow-hidden flex flex-col relative z-10 bg-gray-50/20">
                         {gestaoLoading ? (
                             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-50/60 backdrop-blur-sm">
-                                <div className="w-10 h-10 border-2 border-rose-500 border-t-transparent rounded-full animate-spin mb-4" />
-                                <p className="text-xs font-black text-rose-500 uppercase tracking-widest">Sincronizando Motores da API...</p>
+                                <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
+                                <p className="text-xs font-black text-blue-500 uppercase tracking-widest">Sincronizando Motores da API...</p>
                             </div>
                         ) : activeAdAccounts.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center px-6">
@@ -1407,14 +1407,14 @@ export default function Home() {
                             </div>
                         ) : dataError ? (
                             <div className="flex flex-col items-center justify-center h-full text-center px-6">
-                               <p className="text-rose-500 font-bold text-lg">{dataError}</p>
+                               <p className="text-blue-500 font-bold text-lg">{dataError}</p>
                             </div>
                         ) : (
                             <div className="flex-1 overflow-y-auto custom-scrollbar">
                                 {(gestaoNivel === 'campanhas' || gestaoNivel === 'conjuntos') && (
                                     <table className="w-full text-left border-collapse font-sans">
-                                        <thead className="sticky top-0 bg-zinc-900 z-10">
-                                            <tr className="border-b border-zinc-800">
+                                        <thead className="sticky top-0 bg-slate-900 z-10">
+                                            <tr className="border-b border-slate-800">
                                                 <th className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap w-40">Status (Meta)</th>
                                                 <th className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">Nome do {gestaoNivel === 'campanhas' ? 'Campanha' : 'Conjunto'}</th>
                                                 <th className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">Orçamento</th>
@@ -1426,18 +1426,18 @@ export default function Home() {
                                             {(gestaoNivel === 'campanhas' ? campaigns : adSets).map((item, index, arr) => {
                                                 const roboAtivo = robosAtivos[item.id];
                                                 return (
-                                                    <tr key={item.id} className={`bg-zinc-900/50 hover:bg-zinc-800 transition-colors duration-150 group border-b border-zinc-800 ${index === arr.length - 1 ? 'border-b-0' : ''}`}>
+                                                    <tr key={item.id} className={`bg-slate-900/50 hover:bg-slate-800 transition-colors duration-150 group border-b border-slate-800 ${index === arr.length - 1 ? 'border-b-0' : ''}`}>
                                                         <td className="px-3 py-2 whitespace-nowrap text-sm"><StatusIndicator status={item.status}/></td>
                                                         <td className="px-3 py-2 text-sm">
                                                             <p onClick={() => {
                                                                 if (gestaoNivel === 'campanhas') { setGestaoCampanhaAtiva(item as Campaign); setGestaoNivel('conjuntos'); }
                                                                 else if (gestaoNivel === 'conjuntos') { setGestaoConjuntoAtivo(item as AdSet); setGestaoNivel('anuncios'); }
-                                                            }} className="text-base font-semibold text-white hover:text-rose-500 cursor-pointer transition-colors inline-block truncate max-w-[400px]">{item.name}</p>
+                                                            }} className="text-base font-semibold text-white hover:text-blue-500 cursor-pointer transition-colors inline-block truncate max-w-[400px]">{item.name}</p>
                                                             
                                                             <div className="flex items-center gap-3 mt-1.5">
                                                                 <p className="text-xs text-gray-400 font-mono">ID: {item.id}</p>
                                                                 {item._originName && (
-                                                                    <span className="bg-rose-500/5 border border-rose-500/10 text-rose-400 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded">
+                                                                    <span className="bg-blue-500/5 border border-blue-500/10 text-blue-400 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded">
                                                                         CA: {item._originName}
                                                                     </span>
                                                                 )}
@@ -1485,7 +1485,7 @@ export default function Home() {
                                 {gestaoNivel === 'anuncios' && (
                                     <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 font-sans">
                                         {ads.map((ad) => (
-                                            <div key={ad.id} className="bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden flex flex-col group hover:border-rose-500/20 transition-colors shadow-2xl">
+                                            <div key={ad.id} className="bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden flex flex-col group hover:border-blue-500/20 transition-colors shadow-2xl">
                                                 <div className="aspect-video bg-gray-50 border-b border-gray-200 relative flex items-center justify-center">
                                                     
                                                     {(ad.creative?.thumbnail_url || ad.creative?.image_url) ? (
@@ -1509,13 +1509,13 @@ export default function Home() {
                                                         <span className="text-gray-600 font-black font-mono text-[10px] uppercase tracking-widest">[Sem Mídia API]</span>
                                                     )}
 
-                                                    <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-gray-200">
+                                                    <div className="absolute top-2 left-2 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-gray-200">
                                                         {ad.status === 'ACTIVE' ? (
                                                             <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-[9px] uppercase tracking-widest">
                                                                 <span className="relative flex h-2 w-2"><span className="animate-pulse-green absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span> ON
                                                             </div>
                                                         ) : (
-                                                            <div className="flex items-center gap-1.5 text-gray-500 font-bold text-[9px] uppercase tracking-widest"><span className="h-2 w-2 rounded-full bg-zinc-600"></span> OFF</div>
+                                                            <div className="flex items-center gap-1.5 text-gray-500 font-bold text-[9px] uppercase tracking-widest"><span className="h-2 w-2 rounded-full bg-slate-600"></span> OFF</div>
                                                         )}
                                                     </div>
                                                 </div>
@@ -1570,11 +1570,11 @@ export default function Home() {
                             ) : (
                                 roboLogs.map((log) => (
                                     <div key={log.id} className="p-4 rounded-2xl bg-[#050509] border border-gray-200 shadow-inner relative overflow-hidden group">
-                                        <div className={`absolute left-0 top-0 bottom-0 w-1 ${log.tipo === 'stop' ? 'bg-red-500' : log.tipo === 'escala' ? 'bg-emerald-500' : log.tipo === 'info' ? 'bg-purple-500' : 'bg-blue-500'}`}></div>
+                                        <div className={`absolute left-0 top-0 bottom-0 w-1 ${log.tipo === 'stop' ? 'bg-blue-500' : log.tipo === 'escala' ? 'bg-emerald-500' : log.tipo === 'info' ? 'bg-purple-500' : 'bg-blue-500'}`}></div>
                                         
                                         <div className="flex justify-between items-start mb-2 ml-2">
                                             <span className="text-[9px] font-black uppercase tracking-widest text-gray-500">{log.dataHora}</span>
-                                            {log.tipo === 'stop' && <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">Auto-Pause</span>}
+                                            {log.tipo === 'stop' && <span className="bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">Auto-Pause</span>}
                                             {log.tipo === 'escala' && <span className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">Escala Mágica</span>}
                                             {log.tipo === 'info' && <span className="bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">Sistema</span>}
                                         </div>
@@ -1603,7 +1603,7 @@ export default function Home() {
                     
                     <div className="relative group shrink-0">
                         <input type="file" multiple accept="image/*,video/*" onChange={handleImagensCofre} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
-                        <button className="magnetic-btn flex items-center gap-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(244,63,94,0.25)] uppercase tracking-widest">
+                        <button className="magnetic-btn flex items-center gap-3 bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.25)] uppercase tracking-widest">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                             Fazer Upload
                         </button>
@@ -1613,7 +1613,7 @@ export default function Home() {
                 <GlassPanel className="flex-1 min-h-[500px] p-6 bg-gray-50/20">
                     {cofreArquivos.length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 rounded-3xl p-12 bg-white shadow-sm">
-                            <div className="w-24 h-24 rounded-full bg-rose-500/10 flex items-center justify-center mb-6 border border-rose-500/20 text-rose-500 shadow-inner">
+                            <div className="w-24 h-24 rounded-full bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20 text-blue-500 shadow-inner">
                                 {IconCloud}
                             </div>
                             <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest mb-3">Seu Cofre está vazio</h3>
@@ -1629,7 +1629,7 @@ export default function Home() {
                     ) : (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                             {cofreArquivos.map((arquivo) => (
-                                <div key={arquivo.id} className="group relative bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden shadow-inner hover:border-rose-500/30 transition-all duration-300">
+                                <div key={arquivo.id} className="group relative bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden shadow-inner hover:border-blue-500/30 transition-all duration-300">
                                     <div className="aspect-[4/5] relative bg-[#010103] flex items-center justify-center">
                                         {arquivo.type === 'video' ? (
                                             <video src={arquivo.url} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" autoPlay muted loop playsInline />
@@ -1638,7 +1638,7 @@ export default function Home() {
                                         )}
                                         
                                         <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                            <button onClick={() => setCofreArquivos(prev => prev.filter(a => a.id !== arquivo.id))} className="w-8 h-8 bg-rose-600/90 text-gray-900 rounded-lg flex items-center justify-center backdrop-blur-sm shadow-xl text-xs hover:bg-rose-500">✕</button>
+                                            <button onClick={() => setCofreArquivos(prev => prev.filter(a => a.id !== arquivo.id))} className="w-8 h-8 bg-blue-600/90 text-gray-900 rounded-lg flex items-center justify-center backdrop-blur-sm shadow-xl text-xs hover:bg-blue-500">✕</button>
                                         </div>
                                     </div>
                                     <div className="p-3 border-t border-gray-200">
@@ -1665,7 +1665,7 @@ export default function Home() {
                         <p className="text-sm font-bold text-gray-500 mt-1">Configure o ecossistema de cada produto. Salve para preenchimento em 1 clique.</p>
                     </div>
                     
-                    <button onClick={() => { setWsForm({ id: '', nomeProduto: '', nomeOferta: '', status: 'teste', link: '', pixelId: '', parametrosUtm: '' }); setIsModalWsOpen(true); }} className="magnetic-btn shrink-0 flex items-center gap-3 bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(244,63,94,0.25)] uppercase tracking-widest">
+                    <button onClick={() => { setWsForm({ id: '', nomeProduto: '', nomeOferta: '', status: 'teste', link: '', pixelId: '', parametrosUtm: '' }); setIsModalWsOpen(true); }} className="magnetic-btn shrink-0 flex items-center gap-3 bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.25)] uppercase tracking-widest">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/></svg>
                         Nova Oferta
                     </button>
@@ -1674,7 +1674,7 @@ export default function Home() {
                 <GlassPanel className="flex-1 min-h-[500px] p-6 bg-gray-50/20">
                     {workspacesList.length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 rounded-3xl p-12 bg-white shadow-sm">
-                            <div className="w-24 h-24 rounded-full bg-rose-500/10 flex items-center justify-center mb-6 border border-rose-500/20 text-rose-500">
+                            <div className="w-24 h-24 rounded-full bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20 text-blue-500">
                                 {IconWorkspace}
                             </div>
                             <h3 className="text-xl font-black text-gray-900 uppercase tracking-widest mb-3">Nenhuma Oferta Salva</h3>
@@ -1690,15 +1690,15 @@ export default function Home() {
                                 const isAtivo = wsAtivo?.id === ws.id;
                                 const isValidada = ws.status === 'validada';
                                 return (
-                                    <div key={ws.id} className={`group flex flex-col bg-white shadow-sm border rounded-3xl overflow-hidden transition-all duration-300 ${isAtivo ? 'border-rose-500 shadow-[0_0_25px_rgba(244,63,94,0.15)] scale-[1.02]' : 'border-gray-200 hover:border-white/15'}`}>
+                                    <div key={ws.id} className={`group flex flex-col bg-white shadow-sm border rounded-3xl overflow-hidden transition-all duration-300 ${isAtivo ? 'border-blue-500 shadow-[0_0_25px_rgba(59,130,246,0.15)] scale-[1.02]' : 'border-gray-200 hover:border-white/15'}`}>
                                         
                                         <div className="p-6 border-b border-gray-200 bg-white">
                                             <div className="flex items-start justify-between mb-4">
-                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isAtivo ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]' : 'bg-zinc-900/40 text-gray-500 border border-gray-200'}`}>
+                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isAtivo ? 'bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-slate-900/40 text-gray-500 border border-gray-200'}`}>
                                                     {IconWorkspace}
                                                 </div>
                                                 <div className="flex flex-col items-end gap-1.5">
-                                                    {isAtivo && <span className="bg-rose-500/10 text-rose-400 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded border border-rose-500/20">Operando</span>}
+                                                    {isAtivo && <span className="bg-blue-500/10 text-blue-400 text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded border border-blue-500/20">Operando</span>}
                                                     <span className={`text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded border ${isValidada ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'}`}>
                                                         {isValidada ? '✅ Validada' : '🧪 Teste'}
                                                     </span>
@@ -1720,7 +1720,7 @@ export default function Home() {
                                         </div>
 
                                         <div className="p-4 border-t border-gray-200 bg-white shadow-sm flex gap-3">
-                                            <button onClick={() => ativarWorkspace(ws)} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isAtivo ? 'bg-zinc-800 text-gray-500 cursor-not-allowed' : 'bg-rose-600/10 text-rose-400 hover:bg-rose-600 hover:text-gray-900 border border-rose-500/20'}`}>
+                                            <button onClick={() => ativarWorkspace(ws)} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isAtivo ? 'bg-slate-800 text-gray-500 cursor-not-allowed' : 'bg-blue-600/10 text-blue-400 hover:bg-blue-600 hover:text-gray-900 border border-blue-500/20'}`}>
                                                 {isAtivo ? 'Operando' : 'Ativar Oferta'}
                                             </button>
                                             <button onClick={() => { setWsForm(ws); setIsModalWsOpen(true); }} className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-white/[0.05] text-gray-500 hover:text-gray-900 rounded-xl transition-all">
@@ -1731,7 +1731,7 @@ export default function Home() {
                                                 setWorkspacesList(novaLista);
                                                 localStorage.setItem("autoads_workspaces_list", JSON.stringify(novaLista));
                                                 if(isAtivo) setWsAtivo(null);
-                                            }} className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-rose-500/10 text-gray-500 hover:text-rose-500 rounded-xl transition-all text-sm font-bold">
+                                            }} className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-blue-500/10 text-gray-500 hover:text-blue-500 rounded-xl transition-all text-sm font-bold">
                                                 ✕
                                             </button>
                                         </div>
@@ -1752,7 +1752,7 @@ export default function Home() {
       
       {/* MODAL COFRE DE CRIATIVOS (FULLY INTEGRATED) */}
       {isModalCofreOpen && (
-        <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
+        <div className="fixed inset-0 z-[300] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
           <div className="bg-white shadow-sm border border-gray-200 rounded-[32px] shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col relative">
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
             
@@ -1779,8 +1779,8 @@ export default function Home() {
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {cofreArquivos.map(arquivo => (
-                    <div key={arquivo.id} onClick={() => selecionarDoCofre(arquivo)} className="cursor-pointer group relative bg-zinc-900/40 border border-gray-200 rounded-xl overflow-hidden hover:border-blue-500/40 transition-all duration-300">
-                      <div className="aspect-[4/5] bg-black flex items-center justify-center overflow-hidden">
+                    <div key={arquivo.id} onClick={() => selecionarDoCofre(arquivo)} className="cursor-pointer group relative bg-slate-900/40 border border-gray-200 rounded-xl overflow-hidden hover:border-blue-500/40 transition-all duration-300">
+                      <div className="aspect-[4/5] bg-slate-950 flex items-center justify-center overflow-hidden">
                         {arquivo.type === 'video' ? (
                           <video src={arquivo.url} className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500" muted />
                         ) : (
@@ -1808,7 +1808,7 @@ export default function Home() {
 
       {/* MODAL DO ROBÔ */}
       {modalRoboOpen && itemRobo && (
-        <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
+        <div className="fixed inset-0 z-[300] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
           <div className="bg-white shadow-sm border border-gray-200 rounded-[32px] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col relative">
             <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none"></div>
             
@@ -1834,14 +1834,14 @@ export default function Home() {
 
               {/* REGRA 1: STOP LOSS */}
               <div>
-                  <h4 className="text-sm font-black text-rose-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Defesa (Stop-Loss)
+                  <h4 className="text-sm font-black text-blue-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Defesa (Stop-Loss)
                   </h4>
                   <div className="bg-white shadow-sm border border-gray-200 rounded-2xl p-6">
                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block">Pausar campanha se gastar (R$) sem fazer vendas:</label>
                       <div className="relative">
                         <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-black font-mono">R$</span>
-                        <input type="number" value={formRobo.stopLossGasto} onChange={(e) => setFormRobo({...formRobo, stopLossGasto: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl pl-16 pr-6 py-3.5 text-xl font-black font-mono text-gray-900 focus:border-rose-500 transition-all outline-none" placeholder="50.00"/>
+                        <input type="number" value={formRobo.stopLossGasto} onChange={(e) => setFormRobo({...formRobo, stopLossGasto: e.target.value})} className="w-full bg-white border border-gray-200 rounded-xl pl-16 pr-6 py-3.5 text-xl font-black font-mono text-gray-900 focus:border-blue-500 transition-all outline-none" placeholder="50.00"/>
                       </div>
                   </div>
               </div>
@@ -1870,7 +1870,7 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-between gap-4">
               {robosAtivos[itemRobo.id] ? (
-                  <button type="button" onClick={desativarRobo} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-rose-500 hover:bg-rose-500/10 transition-colors">Desativar Robô</button>
+                  <button type="button" onClick={desativarRobo} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/10 transition-colors">Desativar Robô</button>
               ) : <div></div>}
               
               <div className="flex gap-3">
@@ -1886,9 +1886,9 @@ export default function Home() {
 
       {/* MODAL DE EDIÇÃO FLUTUANTE SIMULADO (GESTÃO) */}
       {itemEditando && (
-        <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
+        <div className="fixed inset-0 z-[300] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
           <div className="bg-white shadow-sm border border-gray-200 rounded-[32px] shadow-2xl w-full max-w-xl overflow-hidden flex flex-col relative">
-            <div className="absolute top-0 right-0 w-48 h-48 bg-rose-600/10 rounded-full blur-[60px] pointer-events-none"></div>
+            <div className="absolute top-0 right-0 w-48 h-48 bg-blue-600/10 rounded-full blur-[60px] pointer-events-none"></div>
             
             <div className="p-8 border-b border-gray-200 bg-white shadow-sm">
               <div className="flex items-center justify-between">
@@ -1911,7 +1911,7 @@ export default function Home() {
                     <label className="text-xs font-black text-gray-500 uppercase tracking-widest mb-3 block">Orçamento Diário (R$)</label>
                     <div className="relative">
                       <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-black font-mono">R$</span>
-                      <input type="number" defaultValue={(itemEditando.daily_budget || itemEditando.lifetime_budget) / 100} className="w-full bg-white border border-gray-200 rounded-xl pl-16 pr-6 py-3.5 text-lg font-black font-mono text-gray-900 focus:bg-white focus:border-rose-500 transition-all outline-none shadow-inner"/>
+                      <input type="number" defaultValue={(itemEditando.daily_budget || itemEditando.lifetime_budget) / 100} className="w-full bg-white border border-gray-200 rounded-xl pl-16 pr-6 py-3.5 text-lg font-black font-mono text-gray-900 focus:bg-white focus:border-blue-500 transition-all outline-none shadow-inner"/>
                     </div>
                   </div>
               )}
@@ -1923,7 +1923,7 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-end gap-4">
               <button type="button" onClick={() => setItemEditando(null)} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 transition-colors">Cancelar</button>
-              <button type="button" onClick={() => { setItemEditando(null); alert("No futuro, conectaremos este salvamento de nome/orçamento na API também."); }} className="magnetic-btn px-8 py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all">Sincronizar API</button>
+              <button type="button" onClick={() => { setItemEditando(null); alert("No futuro, conectaremos este salvamento de nome/orçamento na API também."); }} className="magnetic-btn px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all">Sincronizar API</button>
             </div>
           </div>
         </div>
@@ -1931,14 +1931,14 @@ export default function Home() {
 
       {/* MODAL DOS WORKSPACES */}
       {isModalWsOpen && (
-        <div className="fixed inset-0 z-[300] bg-black/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
+        <div className="fixed inset-0 z-[300] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
           <div className="bg-white shadow-sm border border-gray-200 rounded-[32px] shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col relative">
             
             <div className={`absolute top-0 right-0 w-80 h-80 rounded-full blur-[100px] pointer-events-none transition-colors duration-500 ${wsForm.status === 'validada' ? 'bg-emerald-600/10' : 'bg-yellow-600/10'}`}></div>
             
             <div className="p-8 border-b border-gray-200 flex items-center justify-between bg-white shadow-sm">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-500/20">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
                     {IconWorkspace}
                   </div>
                   <div>
@@ -2008,7 +2008,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">ID do Pixel Meta Principal</label>
-                        <input type="text" value={wsForm.pixelId} onChange={e => setWsForm({...wsForm, pixelId: e.target.value.replace(/\D/g, '')})} className={`${inputClass} font-mono text-rose-400`} placeholder="123456789098765"/>
+                        <input type="text" value={wsForm.pixelId} onChange={e => setWsForm({...wsForm, pixelId: e.target.value.replace(/\D/g, '')})} className={`${inputClass} font-mono text-blue-400`} placeholder="123456789098765"/>
                       </div>
                       <div>
                         <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">UTMs Padrão (Sem o ?)</label>
@@ -2021,7 +2021,7 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-end gap-4">
               <button type="button" onClick={() => setIsModalWsOpen(false)} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:bg-white/[0.05] transition-colors">Cancelar</button>
-              <button type="button" onClick={salvarWorkspace} disabled={!wsForm.nomeProduto || !wsForm.nomeOferta} className="magnetic-btn px-8 py-3 bg-rose-600 disabled:opacity-30 hover:bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all flex items-center gap-2">
+              <button type="button" onClick={salvarWorkspace} disabled={!wsForm.nomeProduto || !wsForm.nomeOferta} className="magnetic-btn px-8 py-3 bg-blue-600 disabled:opacity-30 hover:bg-blue-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-2">
                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
                  Salvar Configuração
               </button>
