@@ -801,7 +801,7 @@ export default function Home() {
       </div>
 
       {/* BARRA LATERAL ANTIGRAVITY */}
-      <aside className="cursor-pointer w-[340px] bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
+      <aside className="cursor-pointer w-60 bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
         <div className="h-24 flex items-center px-8 border-b border-white/5">
           <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-blue-500">ADS</span></span>
           <span className="ml-3 text-[9px] font-bold tracking-widest bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase">
@@ -813,7 +813,7 @@ export default function Home() {
         <nav className="flex-1 px-4 py-8 space-y-2.5">
           <button onClick={() => setAbaAtiva('workspaces')}
             className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconWorkspace} Workspace
+            {IconWorkspace} Sua Oferta
           </button>
 
           <button onClick={() => setAbaAtiva('gestao')}
@@ -823,12 +823,12 @@ export default function Home() {
 
           <button onClick={() => setAbaAtiva('lancador')}
             className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconCreator} Lançador em Massa
+            {IconCreator} Crie sua Campanha
           </button>
 
           <button onClick={() => setAbaAtiva('biblioteca')}
             className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconFolder} Cofre de Criativo
+            {IconFolder} Seus Criativos
           </button>
         </nav>
 
