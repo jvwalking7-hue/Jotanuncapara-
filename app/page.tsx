@@ -111,13 +111,13 @@ function GlassPanel({ children, className = "" }: { children: React.ReactNode; c
 
 function Toggle({ enabled, onChange, label, desc }: { enabled: boolean; onChange: (v: boolean) => void; label: string; desc?: string }) {
   return (
-    <div className="flex items-center justify-between gap-6 py-5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] px-4 rounded-2xl transition-colors cursor-pointer" onClick={() => onChange(!enabled)}>
+    <div className="flex items-center justify-between gap-2 py-3.5 border-b border-white/5 last:border-0 hover:bg-white/[0.02] px-3 rounded-xl transition-colors cursor-pointer" onClick={() => onChange(!enabled)}>
       <div className="min-w-0">
-        <p className="text-lg font-black text-white">{label}</p>
-        {desc && <p className="text-sm text-zinc-500 mt-1 leading-relaxed">{desc}</p>}
+        <p className="text-sm font-bold text-white">{label}</p>
+        {desc && <p className="text-xs text-zinc-500 mt-0.5 leading-relaxed">{desc}</p>}
       </div>
-      <button type="button" aria-pressed={enabled} className={`relative w-16 h-8 rounded-full shrink-0 transition-all duration-300 focus:outline-none border-2 ${enabled ? 'bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.5)] border-transparent' : 'bg-[#0a0a0f] border-white/10'}`}>
-        <span className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${enabled ? 'translate-x-8' : 'translate-x-0'}`} />
+      <button type="button" aria-pressed={enabled} className={`relative w-12 h-6 rounded-full shrink-0 transition-all duration-300 focus:outline-none border-2 ${enabled ? 'bg-gradient-to-r from-rose-500 to-rose-600 shadow-[0_0_15px_rgba(244,63,94,0.5)] border-transparent' : 'bg-[#0a0a0f] border-white/10'}`}>
+        <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-transform duration-300 ${enabled ? 'translate-x-6' : 'translate-x-0'}`} />
       </button>
     </div>
   );
@@ -132,12 +132,12 @@ function MetricCard({ label, value, accent = "red", sub }: { label: string; valu
   };
   
   return (
-    <div className={`relative overflow-hidden rounded-3xl border ${ring[accent].split(' ').pop()} bg-zinc-950/60 px-6 py-6 group transition-all duration-300 hover:shadow-2xl`}>
+    <div className={`relative overflow-hidden rounded-2xl border ${ring[accent].split(' ').pop()} bg-zinc-950/60 px-3 py-3 group transition-all duration-300 hover:shadow-2xl`}>
       <div className={`absolute inset-0 bg-gradient-to-br ${ring[accent].split(' ').slice(0,2).join(' ')} opacity-30 pointer-events-none group-hover:opacity-60 transition-opacity duration-300`} />
       <div className="relative z-10">
-        <p className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-2">{label}</p>
-        <p className="text-4xl font-black font-mono tracking-tight text-white mb-2">{value}</p>
-        {sub && <p className="text-[11px] text-zinc-400 uppercase tracking-widest font-semibold">{sub}</p>}
+        <p className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-1">{label}</p>
+        <p className="text-sm font-black font-mono tracking-tight text-white mb-1">{value}</p>
+        {sub && <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">{sub}</p>}
       </div>
     </div>
   );
@@ -145,21 +145,21 @@ function MetricCard({ label, value, accent = "red", sub }: { label: string; valu
 
 function SectionStep({ num, title, tooltip, children }: { num: string; title: string; tooltip?: string; children: React.ReactNode }) {
   return (
-    <div className="relative pl-12 sm:pl-16 pb-12 border-l border-white/5 last:border-transparent last:pb-0 animate-fade-in">
-      <div className="absolute left-[-17px] top-0 w-8 h-8 rounded-full bg-[#030306] border-2 border-rose-500 flex items-center justify-center text-sm font-black text-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]">{num}</div>
-      <div className="flex flex-col xl:flex-row gap-8 items-start">
-        <div className="flex-1 w-full space-y-6">
-          <h3 className="text-xl sm:text-2xl font-black uppercase tracking-widest text-white">{title}</h3>
+    <div className="relative pl-10 sm:pl-12 pb-8 border-l border-white/5 last:border-transparent last:pb-0 animate-fade-in">
+      <div className="absolute left-[-14px] top-0 w-7 h-7 rounded-full bg-[#030306] border-2 border-rose-500 flex items-center justify-center text-xs font-black text-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]">{num}</div>
+      <div className="flex flex-col xl:flex-row gap-5 items-start">
+        <div className="flex-1 w-full space-y-4">
+          <h3 className="text-lg font-black uppercase tracking-widest text-white whitespace-nowrap">{title}</h3>
           {children}
         </div>
         {tooltip && (
-          <div className="w-full xl:w-[350px] shrink-0 p-6 rounded-2xl border border-rose-500/10 bg-zinc-950/70 relative overflow-hidden group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="w-full xl:w-[280px] shrink-0 p-2 rounded-xl border border-rose-500/10 bg-zinc-950/70 relative overflow-hidden group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
             <div className="absolute left-0 top-0 bottom-0 w-1 bg-rose-500 opacity-60 shadow-[0_0_10px_rgba(244,63,94,0.6)]"></div>
-            <div className="flex items-start gap-4">
-              <svg className="w-8 h-8 shrink-0 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 shrink-0 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <div>
-                <p className="text-xs font-black text-rose-500 uppercase tracking-widest mb-1">Dica do Sistema</p>
-                <p className="text-sm text-zinc-300 font-medium leading-relaxed">{tooltip}</p>
+                <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">Dica do Sistema</p>
+                <p className="text-xs text-zinc-300 font-medium leading-relaxed">{tooltip}</p>
               </div>
             </div>
           </div>
@@ -213,7 +213,7 @@ function LandingPage() {
 
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-zinc-950/80 backdrop-blur-xl border-b border-white/5 shadow-2xl" : "bg-transparent"}`}>
         <div className="w-full max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-          <span className="text-2xl font-black tracking-widest text-white">AUTO<span className="text-rose-500">ADS</span></span>
+          <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-rose-500">ADS</span></span>
           <button onClick={() => signIn("facebook", { callbackUrl: "/workspaces" })}
             className="magnetic-btn bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-white text-sm font-bold px-8 py-3.5 rounded-2xl transition-all shadow-[0_0_30px_rgba(244,63,94,0.3)] uppercase tracking-widest">
             Entrar no Painel
@@ -229,11 +229,11 @@ function LandingPage() {
               em segundos.
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-12 font-medium leading-relaxed">
+          <p className="text-sm md:text-base text-zinc-400 max-w-2xl mx-auto mb-12 font-medium leading-relaxed">
             A plataforma de automação de anúncios definitiva. Escale seu tráfego através da Meta API com a interface Antigravity de alto nível.
           </p>
           <button onClick={() => signIn("facebook", { callbackUrl: "/workspaces" })}
-            className="magnetic-btn w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-white font-bold text-lg px-12 py-5 rounded-2xl transition-all shadow-[0_0_40px_rgba(244,63,94,0.4)] uppercase tracking-widest">
+            className="magnetic-btn w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-700 hover:brightness-110 text-white font-bold text-sm px-12 py-5 rounded-2xl transition-all shadow-[0_0_40px_rgba(244,63,94,0.4)] uppercase tracking-widest">
             Conectar com Facebook
           </button>
         </div>
@@ -766,7 +766,7 @@ export default function Home() {
   };
 
   // INPUT PREMIUM AESTHETICS
-  const inputClass = "w-full bg-[#07070d] border border-white/10 rounded-2xl px-6 py-4 text-lg font-bold text-white focus:bg-[#0c0c14] focus:border-rose-500 focus:ring-4 focus:ring-rose-500/10 transition-all outline-none placeholder:text-zinc-600 shadow-inner";
+  const inputClass = "w-full bg-[#07070d] border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white focus:bg-[#0c0c14] focus:border-rose-500 focus:ring-2 focus:ring-rose-500/10 transition-all outline-none placeholder:text-zinc-600 shadow-inner";
 
   if (status === "loading") {
     return (
@@ -791,7 +791,7 @@ export default function Home() {
       {/* BARRA LATERAL ANTIGRAVITY */}
       <aside className="w-[340px] bg-zinc-950/40 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
         <div className="h-24 flex items-center px-8 border-b border-white/5">
-          <span className="text-2xl font-black tracking-widest text-white">AUTO<span className="text-rose-500">ADS</span></span>
+          <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-rose-500">ADS</span></span>
           <span className="ml-3 text-[9px] font-bold tracking-widest bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-0.5 rounded-full uppercase">
             v2.0
           </span>
@@ -800,28 +800,28 @@ export default function Home() {
         {/* Navigation Menu containing EXCLUSIVELY the 4 required options */}
         <nav className="flex-1 px-4 py-8 space-y-2.5">
           <button onClick={() => setAbaAtiva('workspaces')} 
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconWorkspace} Workspace
           </button>
           
           <button onClick={() => setAbaAtiva('gestao')} 
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconManager} Gerenciador de Campanha
           </button>
 
           <button onClick={() => setAbaAtiva('lancador')} 
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconCreator} Lançador em Massa
           </button>
 
           <button onClick={() => setAbaAtiva('biblioteca')} 
-            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-gradient-to-r from-rose-500/10 to-transparent border border-rose-500/20 font-black text-rose-500 shadow-[0_0_20px_rgba(244,63,94,0.15)]" : "font-bold text-zinc-500 hover:text-white hover:bg-white/[0.03]"}`}>
             {IconFolder} Cofre de Criativo
           </button>
         </nav>
 
-        <div className="p-6 border-t border-white/5 bg-zinc-950/20">
-          <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+        <div className="p-3 border-t border-white/5 bg-zinc-950/20">
+          <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/[0.02] border border-white/5">
             <img src={session.user?.image || ""} alt="Perfil" className="w-12 h-12 rounded-full ring-2 ring-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.2)]" />
             <div className="min-w-0">
               <p className="text-sm font-bold truncate text-white">{session.user?.name}</p>
@@ -840,7 +840,7 @@ export default function Home() {
         {/* HEADER MAIOR */}
         <header className="h-24 flex items-center justify-between px-8 bg-zinc-950/25 backdrop-blur-xl border-b border-white/5 shrink-0 z-10">
           <div>
-            <h1 className="text-xl font-black text-white tracking-tight uppercase">
+            <h1 className="text-base font-black text-white tracking-tight uppercase">
                 {abaAtiva === 'lancador' ? "Lançador em Massa" : abaAtiva === 'gestao' ? "Gerenciador de Campanha" : abaAtiva === 'biblioteca' ? "Cofre de Criativo" : "Workspace"}
             </h1>
             <p className="text-xs font-semibold text-zinc-500 mt-1 uppercase tracking-widest">
@@ -848,7 +848,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             {wsAtivo && (
               <div className="flex items-center gap-3 bg-white/[0.02] border border-rose-500/20 px-5 py-2.5 rounded-full shadow-sm">
                 <span className={`w-2 h-2 rounded-full ${wsAtivo.status === 'validada' ? 'bg-emerald-500' : 'bg-yellow-500'}`} />
@@ -864,16 +864,16 @@ export default function Home() {
         {/* ────────────────────────────────────────────────────────────────────────
             VIEW 1: LANÇADOR EM MASSA (Originally Mesa de Operações)
             ──────────────────────────────────────────────────────────────────────── */}
-        <div key={`tab-${abaAtiva}-lancador`} className={`flex-1 overflow-y-auto p-8 md:p-12 scroll-smooth ${abaAtiva === 'lancador' ? 'block animate-fade-in' : 'hidden'}`}>
-          <div className="w-full max-w-[1600px] mx-auto flex flex-col xl:flex-row items-start gap-8">
+        <div key={`tab-${abaAtiva}-lancador`} className={`flex-1 overflow-y-auto p-2 md:p-2 scroll-smooth ${abaAtiva === 'lancador' ? 'block animate-fade-in' : 'hidden'}`}>
+          <div className="w-full max-w-[1600px] mx-auto flex flex-col xl:flex-row items-start gap-3">
             
-            <div className="flex-1 w-full min-w-0 space-y-8">
+            <div className="flex-1 w-full min-w-0 space-y-5">
               {/* Steps indicators */}
-              <div className="flex items-center bg-zinc-950/40 backdrop-blur-md border border-white/5 p-5 rounded-3xl shadow-2xl overflow-x-auto custom-scrollbar">
+              <div className="flex items-center bg-zinc-950/40 backdrop-blur-md border border-white/5 p-3 rounded-2xl shadow-2xl overflow-x-auto custom-scrollbar">
                 {[1,2,3,4,5,6].map((num,idx) => (
                   <div key={num} className="flex items-center flex-1 last:flex-none cursor-pointer" onClick={() => { if(num < passoAtual) setPassoAtual(num) }}>
                     <div className="flex flex-col items-center gap-2">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black border transition-all duration-500 ${
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black border transition-all duration-500 ${
                         passoAtual > num ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
                         : passoAtual === num ? 'bg-rose-600 border-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] scale-105'
                         : 'bg-zinc-900/50 border-white/5 text-zinc-600'}`}>
@@ -889,37 +889,37 @@ export default function Home() {
               <GlassPanel className="overflow-hidden">
                 {/* PASSO 1: CONTAS */}
                 {passoAtual === 1 && (
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Contas de Destino</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Para onde vamos enviar estas campanhas?</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Contas de Destino</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Para onde vamos enviar estas campanhas?</p>
                     </div>
                     <SectionStep num="1" title="Seleção Multi-Contas" tooltip="Selecione as Business Managers e as contas de anúncio onde as campanhas serão criadas.">
-                      <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-6 shadow-inner">
+                      <div className="bg-zinc-950/60 border border-white/5 rounded-2xl p-2 shadow-inner">
                         <div className="flex items-center justify-between mb-6">
                           <label className="text-sm font-black text-zinc-400 uppercase tracking-widest">Business Managers <span className="text-rose-500">*</span></label>
                           {casSelecionadas.length > 0 && <span className="text-[10px] bg-rose-500/10 text-rose-500 border border-rose-500/25 px-4 py-1.5 rounded-full font-black font-mono shadow-[0_0_15px_rgba(244,63,94,0.15)]">{casSelecionadas.length} CA SELECIONADA(S)</span>}
                         </div>
                         {carregandoBMs ? (
-                          <div className="flex items-center justify-center py-12 text-zinc-500 text-lg font-bold gap-4"><div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"/>Sincronizando com a Meta API...</div>
+                          <div className="flex items-center justify-center py-12 text-zinc-500 text-sm font-bold gap-2"><div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"/>Sincronizando com a Meta API...</div>
                         ) : (
                           <div className="max-h-[400px] overflow-y-auto custom-scrollbar pr-3 space-y-4">
                             {bms.map(bm => (
                               <div key={bm.id} className="border border-white/5 rounded-2xl overflow-hidden bg-zinc-900/20 hover:border-white/10 transition-colors">
-                                <button type="button" onClick={() => setBmExpandida(bmExpandida === bm.id ? null : bm.id)} className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/[0.02]">
-                                  <div className="flex items-center gap-4">
+                                <button type="button" onClick={() => setBmExpandida(bmExpandida === bm.id ? null : bm.id)} className="w-full flex items-center justify-between px-3 py-2 hover:bg-white/[0.02]">
+                                  <div className="flex items-center gap-2">
                                     <div className="w-12 h-12 rounded-xl bg-blue-500/5 border border-blue-500/15 flex items-center justify-center shrink-0"><span className="text-xs font-black text-blue-400">BM</span></div>
                                     <div className="text-left"><p className="text-base font-black text-zinc-100 tracking-tight">{bm.name}</p><p className="text-xs text-zinc-500 font-bold font-mono uppercase mt-1">{bm.contas.length} Contas</p></div>
                                   </div>
                                   <svg className={`w-5 h-5 text-zinc-500 transition-transform ${bmExpandida === bm.id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7"/></svg>
                                 </button>
                                 {bmExpandida === bm.id && (
-                                  <div className="border-t border-white/5 p-4 space-y-2 bg-[#020204]/40">
+                                  <div className="border-t border-white/5 p-2 space-y-2 bg-[#020204]/40">
                                     {bm.contas.map((ca: any) => {
                                       const selecionada = casSelecionadas.find(c => c.caId === ca.id);
                                       return (
                                         <div key={ca.id} className={`rounded-xl border transition-all ${selecionada ? 'border-rose-500/40 bg-rose-500/[0.03]' : 'border-transparent hover:bg-white/[0.02]'}`}>
-                                          <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-4 px-6 py-4 text-left">
+                                          <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-2 px-3 py-2 text-left">
                                             <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 ${selecionada ? 'bg-rose-500 border-rose-500' : 'border-zinc-700 bg-black/40'}`}>
                                               {selecionada && <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7"/></svg>}
                                             </div>
@@ -948,10 +948,10 @@ export default function Home() {
 
                 {/* PASSO 2: ESTRUTURA */}
                 {passoAtual === 2 && (
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Estrutura da Campanha</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Defina as bases: objetivo, dinheiro e multiplicadores.</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Estrutura da Campanha</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Defina as bases: objetivo, dinheiro e multiplicadores.</p>
                     </div>
                     
                     <SectionStep num="1" title="Identificação e Objetivo">
@@ -959,7 +959,7 @@ export default function Home() {
                         <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className={inputClass}/>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                           {OBJETIVOS.map(obj => (
-                            <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-rose-500/5 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.1)]' : 'bg-[#030306] border-white/5 hover:border-white/10'}`}>
+                            <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-rose-500/5 border-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.1)]' : 'bg-[#030306] border-white/5 hover:border-white/10'}`}>
                               <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-rose-500 text-white' : 'bg-zinc-950/60 text-zinc-500'}`}>{obj.icon}</div>
                               <p className={`text-[10px] font-black tracking-widest uppercase text-center ${objetivo === obj.value ? 'text-white' : 'text-zinc-400'}`}>{obj.label}</p>
                             </button>
@@ -969,17 +969,17 @@ export default function Home() {
                     </SectionStep>
                     
                     <SectionStep num="2" title="Painel de Orçamento">
-                      <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-6 shadow-inner">
+                      <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-3 shadow-inner">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                          <div className="flex gap-4">
+                          <div className="flex gap-2">
                               <button onClick={() => setTipoCampanha('CBO')} className={`flex-1 py-4 rounded-xl border text-sm font-black transition-all ${tipoCampanha === 'CBO' ? 'bg-purple-500/10 border-purple-500/50 text-purple-400' : 'bg-zinc-900/20 border-white/5 text-zinc-500'}`}>Campanha (CBO)</button>
                               <button onClick={() => setTipoCampanha('ABO')} className={`flex-1 py-4 rounded-xl border text-sm font-black transition-all ${tipoCampanha === 'ABO' ? 'bg-purple-500/10 border-purple-500/50 text-purple-400' : 'bg-zinc-900/20 border-white/5 text-zinc-500'}`}>Conjunto (ABO)</button>
                           </div>
                           <div className="space-y-4">
-                            <div className="flex items-center gap-4">
-                              <button type="button" onClick={() => setOrcamento(String(Math.max(10, Number(orcamento) - 10)))} className="px-6 py-4 bg-zinc-900/50 border border-white/5 rounded-xl text-xl font-black text-white hover:bg-white/5">-</button>
-                              <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} className={`${inputClass} font-mono text-center text-2xl`}/>
-                              <button type="button" onClick={() => setOrcamento(String(Number(orcamento) + 10))} className="px-6 py-4 bg-zinc-900/50 border border-white/5 rounded-xl text-xl font-black text-white hover:bg-white/5">+</button>
+                            <div className="flex items-center gap-2">
+                              <button type="button" onClick={() => setOrcamento(String(Math.max(10, Number(orcamento) - 10)))} className="px-6 py-4 bg-zinc-900/50 border border-white/5 rounded-xl text-base font-black text-white hover:bg-white/5">-</button>
+                              <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} className={`${inputClass} font-mono text-center text-sm`}/>
+                              <button type="button" onClick={() => setOrcamento(String(Number(orcamento) + 10))} className="px-6 py-4 bg-zinc-900/50 border border-white/5 rounded-xl text-base font-black text-white hover:bg-white/5">+</button>
                             </div>
                             <input type="range" min="10" max="1000" step="10" value={orcamento} onChange={e => setOrcamento(e.target.value)} className="w-full h-2 bg-zinc-900 rounded-full appearance-none accent-rose-500"/>
                           </div>
@@ -988,10 +988,10 @@ export default function Home() {
                     </SectionStep>
 
                     <SectionStep num="3" title="Multiplicador & Lances" tooltip="Defina quantas cópias deseja gerar automaticamente e qual a estratégia de leilão do Facebook.">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-zinc-950/60 p-6 rounded-3xl border border-white/5 shadow-inner">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="bg-zinc-950/60 p-3 rounded-3xl border border-white/5 shadow-inner">
                            <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4 block">Multiplicador de Estrutura</label>
-                           <div className="flex gap-4">
+                           <div className="flex gap-2">
                              <div className="flex-1">
                                <label className="text-xs text-zinc-500 font-bold uppercase mb-2 block">Campanhas</label>
                                <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className={inputClass} />
@@ -1002,7 +1002,7 @@ export default function Home() {
                              </div>
                            </div>
                         </div>
-                        <div className="bg-zinc-950/60 p-6 rounded-3xl border border-white/5 shadow-inner">
+                        <div className="bg-zinc-950/60 p-3 rounded-3xl border border-white/5 shadow-inner">
                            <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4 block">Estratégia de Lance (Bid Strategy)</label>
                            <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className={inputClass}>
                              {ESTRATEGIAS_LANCE.map(est => <option key={est.value} value={est.value}>{est.label}</option>)}
@@ -1021,14 +1021,14 @@ export default function Home() {
                 
                 {/* PASSO 3: RASTREAMENTO */}
                 {passoAtual === 3 && (
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Rastreamento & Destino</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Para onde vamos mandar os clientes e como vamos rastrear?</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Rastreamento & Destino</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Para onde vamos mandar os clientes e como vamos rastrear?</p>
                     </div>
                     <SectionStep num="1" title="Ponto de Conversão">
                       <div className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
                             <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">Local de Conversão</label>
                             <select value={localConversao} onChange={e => setLocalConversao(e.target.value as LocalConversao)} className={inputClass}>
@@ -1041,7 +1041,7 @@ export default function Home() {
                           </div>
                         </div>
                         {['WHATSAPP', 'MESSENGER', 'INSTAGRAM_DIRECT'].includes(localConversao) && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-slide-up">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 animate-slide-up">
                             <div>
                               <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">DDI (Código do País)</label>
                               <input type="text" value={whatsappDdi} onChange={e => setWhatsappDdi(e.target.value)} placeholder="+55" className={inputClass} />
@@ -1055,12 +1055,12 @@ export default function Home() {
                       </div>
                     </SectionStep>
                     <SectionStep num="2" title="Inteligência de Dados (Pixel & UTM)">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-zinc-950/60 border border-white/5 p-6 rounded-3xl shadow-inner">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="bg-zinc-950/60 border border-white/5 p-3 rounded-3xl shadow-inner">
                           <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">ID do Pixel Meta</label>
                           <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className={`${inputClass} font-mono text-rose-400`} />
                         </div>
-                        <div className="bg-zinc-950/60 border border-white/5 p-6 rounded-3xl shadow-inner">
+                        <div className="bg-zinc-950/60 border border-white/5 p-3 rounded-3xl shadow-inner">
                           <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">Parâmetros UTM (Sem o ?)</label>
                           <input type="text" value={parametrosUtm} onChange={e => setParametrosUtm(e.target.value)} placeholder="utm_source=fb&utm_medium=cpc" className={`${inputClass} font-mono`} />
                         </div>
@@ -1071,13 +1071,13 @@ export default function Home() {
 
                 {/* PASSO 4: PÚBLICO */}
                 {passoAtual === 4 && (
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Público Alvo</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Quem vai ver os seus anúncios na internet?</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Público Alvo</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Quem vai ver os seus anúncios na internet?</p>
                     </div>
                     <SectionStep num="1" title="Demografia Base">
-                      <div className="bg-zinc-950/60 p-6 rounded-3xl border border-white/5 shadow-inner grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="bg-zinc-950/60 p-2 rounded-2xl border border-white/5 shadow-inner grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
                           <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">Idade Mínima</label>
                           <input type="number" min="18" max="65" value={idadeMin} onChange={e => setIdadeMin(e.target.value)} className={inputClass} />
@@ -1097,7 +1097,7 @@ export default function Home() {
                       </div>
                     </SectionStep>
                     <SectionStep num="2" title="Localização Geográfica (Países)">
-                      <div className="bg-zinc-950/60 p-6 rounded-3xl border border-white/5 shadow-inner flex flex-wrap gap-3">
+                      <div className="bg-zinc-950/60 p-2 rounded-2xl border border-white/5 shadow-inner flex flex-wrap gap-3">
                         {PAISES_POPULARES.map(p => (
                           <button key={p.value} onClick={() => togglePais(p.value)} className={`px-6 py-3.5 rounded-xl border text-sm font-black transition-all ${paises.includes(p.value) ? 'bg-rose-500/10 border-rose-500 text-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.15)] scale-105' : 'bg-[#030306] border-white/5 text-zinc-500 hover:text-zinc-300 hover:border-white/10'}`}>
                             {p.label}
@@ -1110,13 +1110,13 @@ export default function Home() {
 
                 {/* PASSO 5: IA META */}
                 {passoAtual === 5 && (
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Inteligência Meta</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Potencialize seus resultados ativando o algoritmo Advantage+.</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Inteligência Meta</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Potencialize seus resultados ativando o algoritmo Advantage+.</p>
                     </div>
                     <SectionStep num="1" title="Configurações Advantage+">
-                      <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-4 shadow-inner">
+                      <div className="bg-zinc-950/60 border border-white/5 rounded-2xl p-2 shadow-inner">
                         <Toggle enabled={advantageAudience} onChange={setAdvantageAudience} label="Público Advantage+" desc="A Meta encontrará pessoas fora das suas restrições demográficas se houver alta probabilidade de conversão." />
                         <Toggle enabled={advantagePlacement} onChange={setAdvantagePlacement} label="Posicionamentos Advantage+" desc="Distribuição automática e inteligente de orçamento entre Instagram, Facebook, Reels, Stories, etc." />
                         <Toggle enabled={advantageCreative} onChange={setAdvantageCreative} label="Criativo Advantage+" desc="Otimiza brilho, contraste e aplica melhorias visuais e textos automáticos na mídia do seu anúncio." />
@@ -1127,17 +1127,17 @@ export default function Home() {
                 
                 {/* PASSO 6: CRIATIVOS */}
                 {passoAtual === 6 && ( 
-                  <div className="p-8 sm:p-12 animate-fade-in">
-                    <div className="mb-10 border-b border-white/5 pb-6">
-                      <h2 className="text-3xl font-black text-white uppercase tracking-wider">Criativos & Disparo</h2>
-                      <p className="text-sm font-medium text-zinc-500 mt-2">Escreva a copy, importe os arquivos e inicie o lançamento.</p>
+                  <div className="p-2 sm:p-3 animate-fade-in">
+                    <div className="mb-6 border-b border-white/5 pb-4">
+                      <h2 className="text-sm font-black text-white uppercase tracking-wider">Criativos & Disparo</h2>
+                      <p className="text-xs font-medium text-zinc-500 mt-1">Escreva a copy, importe os arquivos e inicie o lançamento.</p>
                     </div>
 
                     <SectionStep num="1" title="Nomenclatura Inteligente" tooltip="Escolha se quer que os anúncios tenham os mesmos nomes dos arquivos ou se o sistema deve criar um padrão organizado.">
-                        <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-6 shadow-inner">
+                        <div className="bg-zinc-950/60 border border-white/5 rounded-2xl p-2 shadow-inner">
                             <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4 block">Como vamos batizar os Anúncios?</label>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-6 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'arquivo' ? 'bg-rose-500/5 border-rose-500 shadow-inner' : 'bg-zinc-900/20 border-white/5 hover:border-white/10'}`}>
+                            <div className="flex flex-col sm:flex-row gap-2">
+                                <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'arquivo' ? 'bg-rose-500/5 border-rose-500 shadow-inner' : 'bg-zinc-900/20 border-white/5 hover:border-white/10'}`}>
                                     <div className="flex items-center gap-3">
                                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-rose-500' : 'border-zinc-700'}`}>
                                             {regraNomeacao === 'arquivo' && <div className="w-2.5 h-2.5 bg-rose-500 rounded-full" />}
@@ -1146,7 +1146,7 @@ export default function Home() {
                                     </div>
                                     <span className="text-xs text-zinc-500 font-bold uppercase ml-8">Ex: &quot;video_venda_final.mp4&quot;</span>
                                 </button>
-                                <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-6 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'sistema' ? 'bg-blue-500/5 border-blue-500 shadow-inner' : 'bg-zinc-900/20 border-white/5 hover:border-white/10'}`}>
+                                <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-3 rounded-2xl border transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'sistema' ? 'bg-blue-500/5 border-blue-500 shadow-inner' : 'bg-zinc-900/20 border-white/5 hover:border-white/10'}`}>
                                     <div className="flex items-center gap-3">
                                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-500' : 'border-zinc-700'}`}>
                                             {regraNomeacao === 'sistema' && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />}
@@ -1165,7 +1165,7 @@ export default function Home() {
                                 <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">Texto Principal (Copy)</label>
                                 <textarea value={textoAnuncio} onChange={e => setTextoAnuncio(e.target.value)} className={`${inputClass} min-h-[160px] resize-y`} placeholder="Ex: Cansado de perder vendas? Descubra o método..."></textarea>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div>
                                     <label className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-3 block">Título (Headline)</label>
                                     <input type="text" value={titulo} onChange={e => setTitulo(e.target.value)} className={inputClass} placeholder="Ex: Método Comprovado"/>
@@ -1190,26 +1190,26 @@ export default function Home() {
                     </SectionStep>
 
                     <SectionStep num="3" title="Selecionar Mídias" tooltip="Puxe arquivos direto do seu cofre na nuvem ou faça um upload rápido local.">
-                        <div className="flex flex-col gap-6">
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 py-8 bg-gradient-to-r from-blue-600/10 to-purple-600/10 hover:from-blue-600/20 hover:to-purple-600/20 border border-blue-500/20 rounded-3xl flex items-center justify-center gap-4 transition-all shadow-[0_0_20px_rgba(59,130,246,0.1)] group">
+                        <div className="flex flex-col gap-3">
+                            <div className="flex flex-col sm:flex-row gap-2">
+                                <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 py-8 bg-gradient-to-r from-blue-600/10 to-purple-600/10 hover:from-blue-600/20 hover:to-purple-600/20 border border-blue-500/20 rounded-3xl flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.1)] group">
                                     <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                         {IconCloud}
                                     </div>
                                     <div className="text-left">
-                                        <p className="text-lg font-black text-white uppercase tracking-widest">Abrir Cofre de Criativo</p>
+                                        <p className="text-sm font-black text-white uppercase tracking-widest">Abrir Cofre de Criativo</p>
                                         <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mt-1">Biblioteca de Mídias</p>
                                     </div>
                                 </button>
 
                                 <div className="flex-1 relative group cursor-pointer">
                                     <input type="file" multiple accept="image/*,video/*" onChange={handleImagens} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
-                                    <div className="w-full h-full py-8 bg-zinc-950/40 hover:bg-[#07070d] border border-white/10 hover:border-white/20 rounded-3xl flex items-center justify-center gap-4 transition-all">
+                                    <div className="w-full h-full py-8 bg-zinc-950/40 hover:bg-[#07070d] border border-white/10 hover:border-white/20 rounded-3xl flex items-center justify-center gap-2 transition-all">
                                         <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:bg-zinc-700 transition-all duration-300">
                                             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                         </div>
                                         <div className="text-left">
-                                            <p className="text-lg font-black text-white uppercase tracking-widest">Upload do PC</p>
+                                            <p className="text-sm font-black text-white uppercase tracking-widest">Upload do PC</p>
                                             <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest mt-1">Arrastar Arquivos</p>
                                         </div>
                                     </div>
@@ -1217,9 +1217,9 @@ export default function Home() {
                             </div>
 
                             {imagens.length > 0 && (
-                                <div className="bg-zinc-950/60 border border-white/5 rounded-3xl p-6">
+                                <div className="bg-zinc-950/60 border border-white/5 rounded-2xl p-2">
                                     <h4 className="text-sm font-black text-zinc-400 uppercase tracking-widest mb-4">Fila de Disparo ({imagens.length} Arquivos)</h4>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                         {imagens.map((file, idx) => (
                                             <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-zinc-900/50 group">
                                                 {file.type.startsWith('video/') ? (
@@ -1241,9 +1241,9 @@ export default function Home() {
                 )}
 
                 {(lancando || concluido || erroFinal) && (
-                  <div className="m-6 p-6 bg-zinc-950/60 border border-white/5 rounded-3xl shadow-2xl animate-slide-up">
+                  <div className="m-6 p-3 bg-zinc-950/60 border border-white/5 rounded-3xl shadow-2xl animate-slide-up">
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-lg font-black uppercase text-white flex items-center gap-3">
+                      <span className="text-sm font-black uppercase text-white flex items-center gap-3">
                         {lancando && <span className="w-3 h-3 rounded-full bg-rose-500 animate-pulse"/>}
                         {concluido ? "Disparo Concluído" : "Processando..."}
                       </span>
@@ -1252,16 +1252,16 @@ export default function Home() {
                     <div className="w-full bg-[#0a0a0f] rounded-full h-3 mb-6 overflow-hidden border border-white/5">
                       <div className="h-full bg-gradient-to-r from-rose-500 to-rose-600 transition-all duration-300" style={{ width: `${progresso}%` }} />
                     </div>
-                    <div ref={logRef} className="bg-black/60 border border-white/5 rounded-2xl p-6 h-60 overflow-y-auto space-y-2 font-mono text-xs text-zinc-400 shadow-inner scroll-smooth custom-scrollbar">
+                    <div ref={logRef} className="bg-black/60 border border-white/5 rounded-2xl p-3 h-60 overflow-y-auto space-y-2 font-mono text-xs text-zinc-400 shadow-inner scroll-smooth custom-scrollbar">
                       {logItems.map((item, i) => ( <div key={i} className={item.tipo === "erro" ? "text-rose-500 font-bold" : ""}><span className="mr-2 text-rose-500">&gt;&gt;</span>{item.mensagem}</div> ))}
                     </div>
                   </div>
                 )}
 
                 <div className="px-8 py-6 border-t border-white/5 bg-zinc-950/20 flex items-center justify-between">
-                  {passoAtual > 1 ? ( <button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="magnetic-btn px-6 py-3 bg-[#030306] border border-white/10 hover:bg-white/[0.02] rounded-xl text-white text-sm font-bold uppercase tracking-widest transition-all">← Voltar</button> ) : <div/>}
-                  {passoAtual < TOTAL_PASSOS ? ( <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-6 py-3 bg-white text-black hover:bg-zinc-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button> ) : (
-                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="magnetic-btn px-8 py-3.5 bg-gradient-to-r from-rose-600 to-rose-700 disabled:opacity-30 text-white rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all flex items-center gap-3">
+                  {passoAtual > 1 ? ( <button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="magnetic-btn px-4 py-2 bg-[#030306] border border-white/10 hover:bg-white/[0.02] rounded-xl text-white text-sm font-bold uppercase tracking-widest transition-all">← Voltar</button> ) : <div/>}
+                  {passoAtual < TOTAL_PASSOS ? ( <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-4 py-2 bg-white text-black hover:bg-zinc-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button> ) : (
+                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="magnetic-btn px-4 py-2 bg-gradient-to-r text-sm from-rose-600 to-rose-700 disabled:opacity-30 text-white rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all flex items-center gap-3">
                       {lancando ? "Executando..." : "Disparar Armamento"}
                     </button>
                   )}
@@ -1269,10 +1269,10 @@ export default function Home() {
               </GlassPanel>
             </div>
 
-            <div className="w-full xl:w-[360px] shrink-0 xl:sticky xl:top-28 space-y-6">
-              <div className="antigravity-glass rounded-3xl p-6 shadow-2xl relative overflow-hidden">
-                <h3 className="text-sm font-black text-white uppercase tracking-[0.2em] mb-6 flex items-center gap-2">Poder de Fogo Atual</h3>
-                <div className="flex flex-col gap-4">
+            <div className="w-full xl:w-[280px] shrink-0 xl:sticky xl:top-28 space-y-4">
+              <div className="antigravity-glass rounded-2xl p-2 shadow-2xl relative overflow-hidden">
+                <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-3 flex items-center gap-2">Poder de Fogo Atual</h3>
+                <div className="flex flex-col gap-3">
                   <MetricCard label="Contas de Anúncio (CA)" value={casSelecionadas.length} accent="red" sub="Multi-BM configuradas" />
                   <MetricCard label="Campanhas Base" value={Number(quantidadeCampanhas) || 0} accent="purple" sub="Por Conta Ativa" />
                   <MetricCard label="Total Conjuntos" value={totalConjuntos} accent="blue" sub="Volume de disparo" />
@@ -1291,8 +1291,8 @@ export default function Home() {
                 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
                     <div>
-                        <h2 className="text-3xl font-black text-white tracking-tight uppercase">Central de Comando</h2>
-                        <p className="text-sm font-bold text-zinc-500 mt-1">Hierarquia de campanhas do Facebook Ads.</p>
+                        <h2 className="text-2xl font-black text-white tracking-tight uppercase">Central de Comando</h2>
+                        <p className="text-xs font-bold text-zinc-500 mt-1">Hierarquia de campanhas do Facebook Ads.</p>
                     </div>
                     
                     {/* BOTÃO PARA ABRIR O DIÁRIO DE BORDO DO ROBÔ */}
@@ -1342,7 +1342,7 @@ export default function Home() {
                         </div>
 
                         <div className="relative mb-1" ref={dropdownRef}>
-                            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center justify-between gap-4 bg-zinc-950/60 border border-white/10 hover:border-white/20 px-5 py-3 rounded-2xl shadow-inner min-w-[280px] transition-all">
+                            <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center justify-between gap-4 bg-zinc-950/60 border border-white/10 hover:border-white/20 p-2 rounded-xl shadow-inner min-w-[280px] transition-all">
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20">
                                         <span className="text-[10px] font-black text-rose-500">CA</span>
@@ -1415,11 +1415,11 @@ export default function Home() {
                                     <table className="w-full text-left border-collapse font-sans">
                                         <thead className="sticky top-0 bg-[#030306] z-10">
                                             <tr className="border-b border-white/10">
-                                                <th className="px-6 py-4 text-xs font-black uppercase text-zinc-500 tracking-widest w-40">Status (Meta)</th>
-                                                <th className="px-6 py-4 text-xs font-black uppercase text-zinc-500 tracking-widest">Nome do {gestaoNivel === 'campanhas' ? 'Campanha' : 'Conjunto'}</th>
-                                                <th className="px-6 py-4 text-xs font-black uppercase text-zinc-500 tracking-widest">Orçamento</th>
-                                                <th className="px-6 py-4 text-xs font-black uppercase text-zinc-500 tracking-widest text-center">Defesa Automática</th>
-                                                <th className="px-6 py-4 text-xs font-black uppercase text-zinc-500 tracking-widest text-right">Ações</th>
+                                                <th className="px-3 py-2 text-xs whitespace-nowrap font-black uppercase text-zinc-500 tracking-widest w-40">Status (Meta)</th>
+                                                <th className="px-3 py-2 text-xs whitespace-nowrap font-black uppercase text-zinc-500 tracking-widest">Nome do {gestaoNivel === 'campanhas' ? 'Campanha' : 'Conjunto'}</th>
+                                                <th className="px-3 py-2 text-xs whitespace-nowrap font-black uppercase text-zinc-500 tracking-widest">Orçamento</th>
+                                                <th className="px-3 py-2 text-xs whitespace-nowrap font-black uppercase text-zinc-500 tracking-widest text-center">Defesa Automática</th>
+                                                <th className="px-3 py-2 text-xs whitespace-nowrap font-black uppercase text-zinc-500 tracking-widest text-right">Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1427,12 +1427,12 @@ export default function Home() {
                                                 const roboAtivo = robosAtivos[item.id];
                                                 return (
                                                     <tr key={item.id} className={`border-b border-white/5 hover:bg-white/[0.01] transition-colors group ${index === arr.length - 1 ? 'border-b-0' : ''}`}>
-                                                        <td className="px-6 py-4 whitespace-nowrap"><StatusIndicator status={item.status}/></td>
-                                                        <td className="px-6 py-4">
+                                                        <td className="px-3 py-2 whitespace-nowrap text-sm"><StatusIndicator status={item.status}/></td>
+                                                        <td className="px-3 py-2 text-sm">
                                                             <p onClick={() => {
                                                                 if (gestaoNivel === 'campanhas') { setGestaoCampanhaAtiva(item as Campaign); setGestaoNivel('conjuntos'); }
                                                                 else if (gestaoNivel === 'conjuntos') { setGestaoConjuntoAtivo(item as AdSet); setGestaoNivel('anuncios'); }
-                                                            }} className="text-lg font-black text-white hover:text-rose-500 cursor-pointer transition-colors inline-block truncate max-w-[400px]">{item.name}</p>
+                                                            }} className="text-sm font-bold text-white hover:text-rose-500 cursor-pointer transition-colors inline-block truncate max-w-[400px]">{item.name}</p>
                                                             
                                                             <div className="flex items-center gap-3 mt-1.5">
                                                                 <p className="text-[10px] text-zinc-600 font-mono">ID: {item.id}</p>
@@ -1443,12 +1443,12 @@ export default function Home() {
                                                                 )}
                                                             </div>
                                                         </td>
-                                                        <td className="px-6 py-4">
-                                                            <span className="text-base font-black font-mono text-zinc-300">{formatCurrency((item as any).daily_budget || (item as any).lifetime_budget)}</span>
+                                                        <td className="px-3 py-2 text-sm">
+                                                            <span className="text-sm font-bold font-mono text-zinc-300">{formatCurrency((item as any).daily_budget || (item as any).lifetime_budget)}</span>
                                                         </td>
                                                         
-                                                        <td className="px-6 py-4 text-center">
-                                                            <button onClick={() => abrirModalRobo(item)} className={`p-3.5 rounded-xl border transition-all relative group/robo ${roboAtivo ? 'bg-purple-600/10 border-purple-500/40 text-purple-400 hover:bg-purple-600 hover:text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'bg-[#0a0a0f] border-white/5 text-zinc-500 hover:text-white hover:border-white/10'}`} title="Configurar Robô Sentinela">
+                                                        <td className="px-3 py-2 text-center">
+                                                            <button onClick={() => abrirModalRobo(item)} className={`p-2 rounded-lg border transition-all relative group/robo ${roboAtivo ? 'bg-purple-600/10 border-purple-500/40 text-purple-400 hover:bg-purple-600 hover:text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'bg-[#0a0a0f] border-white/5 text-zinc-500 hover:text-white hover:border-white/10'}`} title="Configurar Robô Sentinela">
                                                                 {roboAtivo && (
                                                                     <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
                                                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -1459,14 +1459,14 @@ export default function Home() {
                                                             </button>
                                                         </td>
  
-                                                        <td className="px-6 py-4 text-right">
+                                                        <td className="px-3 py-2 text-right">
                                                             <div className="flex items-center justify-end gap-3">
-                                                                <button onClick={() => setItemEditando({...item, tipo: gestaoNivel})} className="p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 text-blue-400 hover:text-white hover:bg-blue-500 transition-all">{IconEdit}</button>
-                                                                <button onClick={() => handleToggleStatusReal(item, gestaoNivel === 'campanhas' ? 'campaign' : 'adset')} className="p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 text-yellow-400 hover:text-white hover:bg-yellow-500 transition-all">{item.status === 'ACTIVE' ? IconPause : IconPlay}</button>
+                                                                <button onClick={() => setItemEditando({...item, tipo: gestaoNivel})} className="p-2 rounded-lg bg-blue-500/5 border border-blue-500/15 text-blue-400 hover:text-white hover:bg-blue-500 transition-all">{IconEdit}</button>
+                                                                <button onClick={() => handleToggleStatusReal(item, gestaoNivel === 'campanhas' ? 'campaign' : 'adset')} className="p-2 rounded-lg bg-yellow-500/5 border border-yellow-500/15 text-yellow-400 hover:text-white hover:bg-yellow-500 transition-all">{item.status === 'ACTIVE' ? IconPause : IconPlay}</button>
                                                                 <button onClick={() => {
                                                                     if (gestaoNivel === 'campanhas') { setGestaoCampanhaAtiva(item as Campaign); setGestaoNivel('conjuntos'); }
                                                                     else if (gestaoNivel === 'conjuntos') { setGestaoConjuntoAtivo(item as AdSet); setGestaoNivel('anuncios'); }
-                                                                }} className={`px-4 py-2.5 rounded-xl text-white transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest ${gestaoNivel === 'campanhas' ? 'bg-purple-600/10 border border-purple-500/20 text-purple-400 hover:bg-purple-600 hover:text-white' : 'bg-blue-600/10 border border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-white'}`}>
+                                                                }} className={`px-2 py-1 rounded-lg text-white transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest ${gestaoNivel === 'campanhas' ? 'bg-purple-600/10 border border-purple-500/20 text-purple-400 hover:bg-purple-600 hover:text-white' : 'bg-blue-600/10 border border-blue-500/20 text-blue-400 hover:bg-blue-600 hover:text-white'}`}>
                                                                     Ver {gestaoNivel === 'campanhas' ? 'Conjuntos' : 'Anúncios'}
                                                                 </button>
                                                             </div>
@@ -1657,7 +1657,7 @@ export default function Home() {
                 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <h2 className="text-3xl font-black text-white tracking-tight uppercase">Workspace</h2>
+                        <h2 className="text-2xl font-black text-white tracking-tight uppercase">Workspace</h2>
                         <p className="text-sm font-bold text-zinc-500 mt-1">Configure o ecossistema de cada produto. Salve para preenchimento em 1 clique.</p>
                     </div>
                     
