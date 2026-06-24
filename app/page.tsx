@@ -308,6 +308,13 @@ export default function Home() {
   const [erroFinal,   setErroFinal]   = useState("");
   const logRef = useRef<HTMLDivElement>(null);
 
+  const [toast, setToast] = useState<{message: string, type: 'success'|'error'} | null>(null);
+  const showToast = (message: string, type: 'success'|'error' = 'success') => {
+    setToast({message, type});
+    setTimeout(() => setToast(null), 3000);
+  };
+
+
   // === ESTADOS DA ABA DE GESTÃO ===
   const [activeAdAccounts, setActiveAdAccounts] = useState<CASelecionada[]>([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -509,7 +516,7 @@ export default function Home() {
           if (type === 'campaign') setCampaigns(prev => prev.map(c => c.id === obj.id ? {...c, status: obj.status} : c));
           if (type === 'adset') setAdSets(prev => prev.map(c => c.id === obj.id ? {...c, status: obj.status} : c));
           if (type === 'ad') setAds(prev => prev.map(c => c.id === obj.id ? {...c, status: obj.status} : c));
-          alert("Erro: A Meta recusou a alteração de status.");
+          showToast("Erro: A Meta recusou a alteração de status.", "error");
       }
   };
 
@@ -610,9 +617,9 @@ export default function Home() {
          return novas;
        });
        setIsModalCofreOpen(false);
-       alert(`O arquivo ${arquivo.name} foi adicionado à fila de disparo!`);
+       showToast(`O arquivo ${arquivo.name} foi adicionado à fila de disparo!`, "success");
      } catch {
-       alert(`Falha ao injetar ${arquivo.name} na fila. Inserindo dados de referência.`);
+       showToast(`Falha ao injetar ${arquivo.name} na fila. Inserindo dados de referência.`, "error");
      }
   };
 
@@ -782,6 +789,11 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden relative">
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 rounded-lg shadow-lg px-4 py-3 text-sm text-white transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-blue-600'}`}>
+          {toast.message}
+        </div>
+      )}
       {/* Floating neon blobs in background */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] bg-blue-600/[0.03] rounded-full blur-[250px] animate-float" />
@@ -789,7 +801,7 @@ export default function Home() {
       </div>
 
       {/* BARRA LATERAL ANTIGRAVITY */}
-      <aside className="w-[340px] bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
+      <aside className="cursor-pointer w-[340px] bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
         <div className="h-24 flex items-center px-8 border-b border-white/5">
           <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-blue-500">ADS</span></span>
           <span className="ml-3 text-[9px] font-bold tracking-widest bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase">
@@ -1261,7 +1273,7 @@ export default function Home() {
                 <div className="px-8 py-6 border-t border-gray-200 bg-gray-50/20 flex items-center justify-between">
                   {passoAtual > 1 ? ( <button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="magnetic-btn px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-gray-900 text-sm font-bold uppercase tracking-widest transition-all">← Voltar</button> ) : <div/>}
                   {passoAtual < TOTAL_PASSOS ? ( <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-4 py-2 bg-white text-black hover:bg-slate-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button> ) : (
-                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="magnetic-btn px-4 py-2 bg-gradient-to-r text-sm text-white from-blue-600 to-blue-700 disabled:opacity-30 text-gray-900 rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-3">
+                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="cursor-pointer magnetic-btn px-4 py-2 bg-gradient-to-r text-sm text-white from-blue-600 to-blue-700 disabled:opacity-30 text-gray-900 rounded-xl text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-3">
                       {lancando ? "Executando..." : "Disparar Armamento"}
                     </button>
                   )}
@@ -1485,7 +1497,7 @@ export default function Home() {
                                 {gestaoNivel === 'anuncios' && (
                                     <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 font-sans">
                                         {ads.map((ad) => (
-                                            <div key={ad.id} className="bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden flex flex-col group hover:border-blue-500/20 transition-colors shadow-2xl">
+                                            <div key={ad.id} className="cursor-pointer bg-white shadow-sm border border-gray-200 rounded-2xl overflow-hidden flex flex-col group hover:border-blue-500/20 hover:shadow-md transition-all">
                                                 <div className="aspect-video bg-gray-50 border-b border-gray-200 relative flex items-center justify-center">
                                                     
                                                     {(ad.creative?.thumbnail_url || ad.creative?.image_url) ? (
@@ -1527,8 +1539,8 @@ export default function Home() {
                                                     <div className="mt-auto pt-4 border-t border-gray-200 flex items-center justify-between">
                                                         <p className="text-[9px] font-mono text-gray-400 truncate max-w-[100px]">ID: {ad.id}</p>
                                                         <div className="flex gap-2">
-                                                            <button onClick={() => setItemEditando({...ad, tipo: 'anuncios'})} className="p-2.5 bg-blue-500/5 text-blue-400 rounded-xl hover:bg-blue-500 hover:text-gray-900 transition-colors">{IconEdit}</button>
-                                                            <button onClick={() => handleToggleStatusReal(ad, 'ad')} className="p-2.5 bg-yellow-500/5 text-yellow-400 rounded-xl hover:bg-yellow-500 hover:text-gray-900 transition-colors">{ad.status === 'ACTIVE' ? IconPause : IconPlay}</button>
+                                                            <button onClick={() => setItemEditando({...ad, tipo: 'anuncios'})} className="cursor-pointer px-3 py-1.5 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-colors">Editar</button>
+                                                            <button type="button" onClick={() => handleToggleStatusReal(ad, 'ad')} className={`cursor-pointer relative w-12 h-6 rounded-full shrink-0 transition-all duration-300 focus:outline-none ${ad.status === 'ACTIVE' ? 'bg-[#22C55E]' : 'bg-[#6B7280]'}`}><span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-300 ${ad.status === 'ACTIVE' ? 'translate-x-6' : 'translate-x-0'}`}></span></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1603,7 +1615,7 @@ export default function Home() {
                     
                     <div className="relative group shrink-0">
                         <input type="file" multiple accept="image/*,video/*" onChange={handleImagensCofre} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
-                        <button className="magnetic-btn flex items-center gap-3 bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.25)] uppercase tracking-widest">
+                        <button className="cursor-pointer magnetic-btn flex items-center gap-3 bg-blue-600 hover:bg-blue-700 hover:brightness-110 text-gray-900 font-black text-sm px-6 py-3 rounded-2xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.25)] uppercase tracking-widest">
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                             Fazer Upload
                         </button>
@@ -1621,7 +1633,7 @@ export default function Home() {
                             
                             <div className="relative group cursor-pointer inline-block">
                                 <input type="file" multiple accept="image/*,video/*" onChange={handleImagensCofre} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
-                                <button className="magnetic-btn bg-gray-100 border border-gray-200 hover:bg-white/[0.05] text-gray-900 font-black text-xs px-6 py-3.5 rounded-xl transition-all uppercase tracking-widest">
+                                <button className="cursor-pointer magnetic-btn bg-gray-100 border border-gray-200 hover:bg-white/[0.05] text-gray-900 font-black text-xs px-6 py-3.5 rounded-xl transition-all uppercase tracking-widest">
                                     Adicionar Primeiros Arquivos
                                 </button>
                             </div>
@@ -1870,12 +1882,12 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-between gap-4">
               {robosAtivos[itemRobo.id] ? (
-                  <button type="button" onClick={desativarRobo} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/10 transition-colors">Desativar Robô</button>
+                  <button type="button" onClick={desativarRobo} className="cursor-pointer px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-blue-500 hover:bg-blue-500/10 transition-colors">Desativar Robô</button>
               ) : <div></div>}
               
               <div className="flex gap-3">
                   <button type="button" onClick={() => setModalRoboOpen(false)} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:bg-white/[0.05] transition-colors">Cancelar</button>
-                  <button type="button" onClick={salvarRegraRobo} className="magnetic-btn px-8 py-3 bg-purple-600 hover:bg-purple-500 text-gray-900 rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all flex items-center gap-2">
+                  <button type="button" onClick={salvarRegraRobo} className="cursor-pointer magnetic-btn px-8 py-3 bg-purple-600 hover:bg-purple-500 text-gray-900 rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all flex items-center gap-2">
                      Salvar Regras
                   </button>
               </div>
@@ -1923,7 +1935,7 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-end gap-4">
               <button type="button" onClick={() => setItemEditando(null)} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 transition-colors">Cancelar</button>
-              <button type="button" onClick={() => { setItemEditando(null); alert("No futuro, conectaremos este salvamento de nome/orçamento na API também."); }} className="magnetic-btn px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all">Sincronizar API</button>
+              <button type="button" onClick={() => { setItemEditando(null); showToast("No futuro, conectaremos este salvamento de nome/orçamento na API também.", "success"); }} className="magnetic-btn px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all">Sincronizar API</button>
             </div>
           </div>
         </div>
@@ -2021,7 +2033,7 @@ export default function Home() {
 
             <div className="p-8 bg-white shadow-sm border-t border-gray-200 flex items-center justify-end gap-4">
               <button type="button" onClick={() => setIsModalWsOpen(false)} className="px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-gray-900 hover:bg-white/[0.05] transition-colors">Cancelar</button>
-              <button type="button" onClick={salvarWorkspace} disabled={!wsForm.nomeProduto || !wsForm.nomeOferta} className="magnetic-btn px-8 py-3 bg-blue-600 disabled:opacity-30 hover:bg-blue-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-2">
+              <button type="button" onClick={salvarWorkspace} disabled={!wsForm.nomeProduto || !wsForm.nomeOferta} className="cursor-pointer magnetic-btn px-8 py-3 bg-blue-600 disabled:opacity-30 hover:bg-blue-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all flex items-center gap-2">
                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
                  Salvar Configuração
               </button>
