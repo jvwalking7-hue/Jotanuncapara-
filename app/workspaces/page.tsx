@@ -73,11 +73,11 @@ const IconValid = <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strok
 const IconRobot = <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h2v2H9V9zm4 0h2v2h-2V9z" /></svg>;
 
 const OBJETIVOS = [
-  { value: "OUTCOME_SALES", label: "Vendas", icon: <img src="/VENDAS.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
-  { value: "OUTCOME_TRAFFIC", label: "Tráfego", icon: <img src="/TRAFEGO.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
-  { value: "OUTCOME_LEADS", label: "Leads", icon: <img src="/LEADS.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
-  { value: "OUTCOME_ENGAGEMENT", label: "Engajamento", icon: <img src="/engajamento.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
-  { value: "OUTCOME_AWARENESS", label: "Alcance", icon: <img src="/ALCANCE.png" className="w-10 h-10 mb-2 object-contain mx-auto filter brightness-0 sepia-0 saturate-100 invert-[30%] sepia-[80%] hue-rotate-[200deg] brightness-[100%] contrast-[100%]" /> },
+  { value: "OUTCOME_SALES", label: "Vendas", icon: <img src="/VENDAS.png" className="w-10 h-10 mb-2 object-contain mx-auto" /> },
+  { value: "OUTCOME_TRAFFIC", label: "Tráfego", icon: <img src="/TRAFEGO.png" className="w-10 h-10 mb-2 object-contain mx-auto" /> },
+  { value: "OUTCOME_LEADS", label: "Leads", icon: <img src="/LEADS.png" className="w-10 h-10 mb-2 object-contain mx-auto" /> },
+  { value: "OUTCOME_ENGAGEMENT", label: "Engajamento", icon: <img src="/engajamento.png" className="w-10 h-10 mb-2 object-contain mx-auto" /> },
+  { value: "OUTCOME_AWARENESS", label: "Alcance", icon: <img src="/ALCANCE.png" className="w-10 h-10 mb-2 object-contain mx-auto" /> },
 ];
 
 const ESTRATEGIAS_LANCE = [
@@ -248,6 +248,7 @@ export default function Home() {
   const TOTAL_PASSOS = 6;
   const [passoAtual, setPassoAtual] = useState(1);
   const [abaAtiva, setAbaAtiva] = useState<'workspaces' | 'gestao' | 'lancador' | 'biblioteca'>('workspaces');
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
   // Estados Form Lançador
   const [bms, setBms] = useState<any[]>([]);
@@ -801,48 +802,61 @@ export default function Home() {
       </div>
 
       {/* BARRA LATERAL ANTIGRAVITY */}
-      <aside className="cursor-pointer w-[340px] bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative">
-        <div className="h-24 flex items-center px-8 border-b border-white/5">
-          <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-blue-500">ADS</span></span>
-          <span className="ml-3 text-[9px] font-bold tracking-widest bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase">
-            v2.0
-          </span>
+      <aside className={`cursor-pointer bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative transition-all duration-300 ${isSidebarExpanded ? 'w-[340px]' : 'w-[80px]'}`}>
+        <div className={`h-24 flex items-center border-b border-white/5 ${isSidebarExpanded ? 'px-8' : 'px-0 justify-center'}`}>
+          {isSidebarExpanded ? (
+            <>
+              <span className="text-sm font-black tracking-widest text-white">AUTO<span className="text-blue-500">ADS</span></span>
+              <span className="ml-3 text-[9px] font-bold tracking-widest bg-blue-500/10 text-blue-500 border border-blue-500/20 px-2 py-0.5 rounded-full uppercase">
+                v2.0
+              </span>
+            </>
+          ) : (
+            <span className="text-sm font-black tracking-widest text-blue-500">A</span>
+          )}
         </div>
+        <button onClick={() => setIsSidebarExpanded(!isSidebarExpanded)} className="absolute top-7 -right-3 w-6 h-6 bg-blue-600 hover:bg-blue-500 rounded-full flex items-center justify-center z-30 shadow-lg transition-all duration-300 border-2 border-slate-950">
+          <svg className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${isSidebarExpanded ? 'rotate-0' : 'rotate-180'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" /></svg>
+        </button>
 
         {/* Navigation Menu containing EXCLUSIVELY the 4 required options */}
         <nav className="flex-1 px-4 py-8 space-y-2.5">
           <button onClick={() => setAbaAtiva('workspaces')}
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconWorkspace} Sua Oferta
+            className={`w-full flex items-center gap-2 ${isSidebarExpanded ? 'px-5' : 'px-0 justify-center'} py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'workspaces' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            {IconWorkspace} {isSidebarExpanded ? 'Sua Oferta' : 'SO'}
           </button>
 
           <button onClick={() => setAbaAtiva('gestao')}
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconManager} Gerenciador de Campanha
+            className={`w-full flex items-center gap-2 ${isSidebarExpanded ? 'px-5' : 'px-0 justify-center'} py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'gestao' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            {IconManager} {isSidebarExpanded ? 'Gerenciador de Campanha' : 'GC'}
           </button>
 
           <button onClick={() => setAbaAtiva('lancador')}
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconCreator} Crie sua Campanha
+            className={`w-full flex items-center gap-2 ${isSidebarExpanded ? 'px-5' : 'px-0 justify-center'} py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'lancador' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            {IconCreator} {isSidebarExpanded ? 'Crie sua Campanha' : 'CC'}
           </button>
 
           <button onClick={() => setAbaAtiva('biblioteca')}
-            className={`w-full flex items-center gap-2 px-5 py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
-            {IconFolder} Seus Criativos
+            className={`w-full flex items-center gap-2 ${isSidebarExpanded ? 'px-5' : 'px-0 justify-center'} py-4 rounded-2xl text-base transition-all duration-300 group ${abaAtiva === 'biblioteca' ? "bg-slate-800 border-l-4 border-blue-600 border-t-0 border-r-0 border-b-0 font-black text-blue-500 rounded-none" : "font-bold text-slate-500 hover:text-white hover:bg-white/[0.03]"}`}>
+            {IconFolder} {isSidebarExpanded ? 'Seus Criativos' : 'SC'}
           </button>
         </nav>
 
-        <div className="p-3 border-t border-white/5 bg-slate-950/20">
-          <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/[0.02] border border-white/5">
-            <img src={session.user?.image || ""} alt="Perfil" className="w-12 h-12 rounded-full ring-2 ring-blue-500/40 shadow-[0_0_10px_rgba(59,130,246,0.2)]" />
-            <div className="min-w-0">
-              <p className="text-sm font-bold truncate text-white">{session.user?.name}</p>
-              <p className="text-[11px] text-slate-500 truncate font-mono">{session.user?.email}</p>
-            </div>
+        <div className={`p-3 border-t border-white/5 bg-slate-950/20 ${isSidebarExpanded ? '' : 'flex flex-col items-center'}`}>
+          <div className={`flex items-center gap-2 p-2 rounded-2xl bg-white/[0.02] border border-white/5 ${isSidebarExpanded ? '' : 'justify-center'}`}>
+            <img src={session.user?.image || ""} alt="Perfil" className={`rounded-full ring-2 ring-blue-500/40 shadow-[0_0_10px_rgba(59,130,246,0.2)] ${isSidebarExpanded ? 'w-12 h-12' : 'w-9 h-9'}`} />
+            {isSidebarExpanded && (
+              <div className="min-w-0">
+                <p className="text-sm font-bold truncate text-white">{session.user?.name}</p>
+                <p className="text-[11px] text-slate-500 truncate font-mono">{session.user?.email}</p>
+              </div>
+            )}
           </div>
-          <button onClick={() => signOut()} className="magnetic-btn mt-4 w-full text-xs font-bold text-slate-500 hover:text-blue-400 py-3 transition-colors uppercase tracking-widest border border-white/5 rounded-xl hover:bg-blue-500/5">
-            Desconectar
-          </button>
+          {isSidebarExpanded && (
+            <button onClick={() => signOut()} className="magnetic-btn mt-4 w-full text-xs font-bold text-slate-500 hover:text-blue-400 py-3 transition-colors uppercase tracking-widest border border-white/5 rounded-xl hover:bg-blue-500/5">
+              Desconectar
+            </button>
+          )}
         </div>
       </aside>
 
@@ -907,7 +921,7 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="flex items-center justify-between mb-8">
                           <div>
                             <h2 className="text-2xl font-bold text-slate-900">Seleção Multi-Contas</h2>
@@ -977,30 +991,6 @@ export default function Home() {
                         )}
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1014,12 +1004,12 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="mb-8">
                           <h2 className="text-2xl font-bold text-slate-900">Estrutura da Campanha</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configurações principais da sua estrutura</p>
                         </div>
-                        
+
                         <div className="space-y-10">
                           {/* Identificação e Objetivo */}
                           <section>
@@ -1065,22 +1055,26 @@ export default function Home() {
                           {/* Multiplicador & Lances */}
                           <section>
                             <h3 className="text-lg font-semibold text-slate-800 mb-4">3. Multiplicador & Lances</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest mb-4 block">Multiplicador de Estrutura</label>
-                                <div className="flex gap-4">
-                                  <div className="flex-1">
-                                    <label className="text-xs text-slate-500 font-bold uppercase mb-2 block">Campanhas</label>
-                                    <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className={inputClass} />
-                                  </div>
-                                  <div className="flex-1">
-                                    <label className="text-xs text-slate-500 font-bold uppercase mb-2 block">Conjuntos por Camp.</label>
-                                    <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className={inputClass} />
-                                  </div>
-                                </div>
+                            <div className="grid grid-cols-2 gap-6">
+                              {/* Bloco 1: Campanhas */}
+                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Configuração de Campanhas</h3>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Quantidade de Campanhas</label>
+                                <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none" />
                               </div>
-                              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <label className="text-sm font-bold text-slate-700 uppercase tracking-widest mb-4 block">Estratégia de Lance (Bid Strategy)</label>
+
+                              {/* Bloco 2: Estrutura */}
+                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Definição de Estrutura</h3>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Conjuntos por Camp.</label>
+                                <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none" />
+                              </div>
+                            </div>
+
+                            {/* Estratégia de Lance */}
+                            <div className="mt-6">
+                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Estratégia de Lance</h3>
                                 <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className={inputClass}>
                                   {ESTRATEGIAS_LANCE.map(est => <option key={est.value} value={est.value}>{est.label}</option>)}
                                 </select>
@@ -1096,30 +1090,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1133,12 +1103,12 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="mb-8">
                           <h2 className="text-2xl font-bold text-slate-900">Rastreamento & Destino</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configure as URLs e o rastreamento via Pixel/UTM.</p>
                         </div>
-                        
+
                         <div className="space-y-10">
                           {/* Ponto de Conversão */}
                           <section>
@@ -1156,7 +1126,7 @@ export default function Home() {
                                 <input type="text" value={link} onChange={e => setLink(e.target.value)} placeholder="https://seudominio.com/oferta" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                             </div>
-                            
+
                             {['WHATSAPP', 'MESSENGER', 'INSTAGRAM_DIRECT'].includes(localConversao) && (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 animate-slide-up">
                                 <div>
@@ -1189,30 +1159,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1226,12 +1172,12 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="mb-8">
                           <h2 className="text-2xl font-bold text-slate-900">Público Alvo</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Defina a demografia e a localização das suas campanhas.</p>
                         </div>
-                        
+
                         <div className="space-y-10">
                           {/* Demografia Base */}
                           <section>
@@ -1273,30 +1219,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1310,12 +1232,12 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="mb-8">
                           <h2 className="text-2xl font-bold text-slate-900">Inteligência Meta</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configure os parâmetros da inteligência artificial Advantage+.</p>
                         </div>
-                        
+
                         <div className="space-y-4">
                           <div className="flex items-center justify-between p-5 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
                             <div className="pr-4">
@@ -1349,30 +1271,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1386,12 +1284,12 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col">
                         <div className="mb-8">
                           <h2 className="text-2xl font-bold text-slate-900">Criativos & Disparo</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Última etapa. Adicione as mídias e lance suas campanhas.</p>
                         </div>
-                        
+
                         <div className="space-y-8 flex-1">
                           {/* Seção 1: Seleção de Mídias */}
                           <section>
@@ -1500,10 +1398,10 @@ export default function Home() {
 
                         {/* Botão de Disparo */}
                         <div className="mt-8 pt-8 border-t border-slate-100">
-                          <button 
-                            type="button" 
-                            onClick={handleLancar} 
-                            disabled={!podeLancar || lancando} 
+                          <button
+                            type="button"
+                            onClick={handleLancar}
+                            disabled={!podeLancar || lancando}
                             className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white font-extrabold text-xl py-5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                           >
                             {lancando ? (
@@ -1521,30 +1419,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* SIDE PANEL (4 colunas) */}
-                      <div className="lg:col-span-4">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sticky top-6">
-                          <h3 className="text-lg font-bold text-slate-900 mb-6">Poder de Fogo</h3>
-                          <div className="space-y-6">
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{casSelecionadas.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Contas de Anúncio</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{Number(quantidadeCampanhas) || 0}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Campanhas Base</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{totalConjuntos}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Total de Conjuntos</span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-4xl font-extrabold text-blue-600">{imagens.length}</span>
-                              <span className="text-sm font-medium text-slate-500 uppercase tracking-wider mt-1">Mídias p/ Disparo</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )}
@@ -1578,12 +1452,12 @@ export default function Home() {
 
             <div className="w-full xl:w-[280px] shrink-0 xl:sticky xl:top-28 space-y-4">
               <div className="antigravity-glass rounded-2xl p-2 shadow-2xl relative overflow-hidden">
-                <h3 className="text-xs font-black text-gray-900 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">Poder de Fogo Atual</h3>
+                <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">Poder de Fogo Atual</h3>
                 <div className="flex flex-col gap-3">
-                  <MetricCard label="Contas de Anúncio (CA)" value={casSelecionadas.length} accent="red" sub="Multi-BM configuradas" />
-                  <MetricCard label="Campanhas Base" value={Number(quantidadeCampanhas) || 0} accent="purple" sub="Por Conta Ativa" />
+                  <MetricCard label="Contas de Anúncio (CA)" value={casSelecionadas.length} accent="blue" sub="Multi-BM configuradas" />
+                  <MetricCard label="Campanhas Base" value={Number(quantidadeCampanhas) || 0} accent="blue" sub="Por Conta Ativa" />
                   <MetricCard label="Total Conjuntos" value={totalConjuntos} accent="blue" sub="Volume de disparo" />
-                  <MetricCard label="Mídias p/ Disparo" value={imagens.length} accent="green" sub="Arquivos na fila" />
+                  <MetricCard label="Mídias p/ Disparo" value={imagens.length} accent="blue" sub="Arquivos na fila" />
                 </div>
               </div>
             </div>

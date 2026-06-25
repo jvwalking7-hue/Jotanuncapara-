@@ -887,8 +887,8 @@ export default function Home() {
                   <div key={num} className="flex items-center flex-1 last:flex-none cursor-pointer" onClick={() => { if (num < passoAtual) setPassoAtual(num) }}>
                     <div className="flex flex-col items-center gap-2">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black border transition-all duration-500 ${passoAtual > num ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                          : passoAtual === num ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] scale-105'
-                            : 'bg-gray-100 border-gray-200 text-gray-400'}`}>
+                        : passoAtual === num ? 'bg-blue-600 border-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] scale-105'
+                          : 'bg-gray-100 border-gray-200 text-gray-400'}`}>
                         {passoAtual > num ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" /></svg> : <span>{passoIcones[idx]}</span>}
                       </div>
                       <span className={`text-[10px] font-black uppercase tracking-widest whitespace-nowrap ${passoAtual === num ? 'text-blue-500' : passoAtual > num ? 'text-emerald-400' : 'text-gray-400'}`}>{passoLabels[idx]}</span>
@@ -919,7 +919,7 @@ export default function Home() {
                               </span>
                             )}
                           </div>
-                          
+
                           {carregandoBMs ? (
                             <div className="flex flex-col items-center justify-center py-16 text-gray-500 gap-4">
                               <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -931,7 +931,7 @@ export default function Home() {
                                 const isExpandido = bmExpandida === bm.id;
                                 const contasSelecionadasNaBM = bm.contas.filter((ca: any) => casSelecionadas.some(c => c.caId === ca.id)).length;
                                 const isAtivo = isExpandido || contasSelecionadasNaBM > 0;
-                                
+
                                 return (
                                   <div key={bm.id} className={`border rounded-xl p-5 mb-4 transition-colors ${isAtivo ? 'border-2 border-blue-600 bg-blue-50/30' : 'border-slate-200 hover:border-blue-400 bg-white'}`}>
                                     <button type="button" onClick={() => setBmExpandida(isExpandido ? null : bm.id)} className="w-full flex items-center justify-between outline-none">
@@ -951,7 +951,7 @@ export default function Home() {
                                       </div>
                                       <svg className={`w-6 h-6 transition-transform duration-300 ${isExpandido ? 'rotate-180 text-blue-600' : 'text-slate-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M19 9l-7 7-7-7" /></svg>
                                     </button>
-                                    
+
                                     {isExpandido && (
                                       <div className="mt-6 pt-6 border-t border-slate-200/60 space-y-3 animate-fade-in">
                                         {bm.contas.map((ca: any) => {
@@ -967,7 +967,7 @@ export default function Home() {
                                                   <p className="text-[10px] text-slate-400 font-mono uppercase mt-0.5">ID: {ca.id}</p>
                                                 </div>
                                               </button>
-                                              
+
                                               {selecionada && ca.paginas?.length > 0 && (
                                                 <div className="px-12 pb-4 pt-1 bg-slate-50/50">
                                                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 block">Página Vinculada</label>
@@ -1035,7 +1035,7 @@ export default function Home() {
                     <SectionStep num="2" title="Painel de Orçamento">
                       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                          
+
                           <div className="flex flex-col gap-3">
                             <label className="text-blue-400 font-bold tracking-wider uppercase">Nível do Orçamento</label>
                             <div className="inline-flex p-1 bg-slate-100 rounded-lg self-start">
@@ -1096,7 +1096,7 @@ export default function Home() {
 
                       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          
+
                           <div className="flex flex-col gap-3">
                             <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Local de Conversão</label>
                             <select value={localConversao} onChange={e => setLocalConversao(e.target.value as LocalConversao)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 outline-none transition-colors">
@@ -1149,7 +1149,7 @@ export default function Home() {
 
                       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <div className="flex flex-col gap-8">
-                          
+
                           {/* Demografia Base */}
                           <div>
                             <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Demografia Base</h3>
@@ -1208,7 +1208,7 @@ export default function Home() {
                       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
                         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-6">Configurações Advantage+</h3>
                         <div className="space-y-4">
-                          
+
                           <div className="flex items-center justify-between p-5 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all cursor-pointer group" onClick={() => setAdvantageAudience(!advantageAudience)}>
                             <div className="min-w-0 pr-6">
                               <p className="text-base font-semibold text-slate-900">Público Advantage+</p>
@@ -1372,10 +1372,10 @@ export default function Home() {
                           </div>
 
                           {/* Botão Premium Isolado */}
-                          <button 
-                            type="button" 
-                            onClick={handleLancar} 
-                            disabled={!podeLancar || lancando} 
+                          <button
+                            type="button"
+                            onClick={handleLancar}
+                            disabled={!podeLancar || lancando}
                             className="w-full mt-8 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white font-extrabold text-xl py-5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {lancando ? "SUBINDO CAMPANHAS..." : "SUBIR CAMPANHAS!"}
