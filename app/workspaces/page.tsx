@@ -802,7 +802,11 @@ export default function Home() {
       </div>
 
       {/* BARRA LATERAL ANTIGRAVITY */}
-      <aside className={`cursor-pointer bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative transition-all duration-300 ${isSidebarExpanded ? 'w-[340px]' : 'w-[80px]'}`}>
+      <aside
+        onMouseEnter={() => setIsSidebarExpanded(true)}
+        onMouseLeave={() => setIsSidebarExpanded(false)}
+        className={`cursor-pointer bg-slate-950 backdrop-blur-xl border-r border-white/5 flex flex-col shrink-0 z-20 shadow-2xl relative transition-all duration-300 ${isSidebarExpanded ? 'w-[340px]' : 'w-[80px]'}`}
+      >
         <div className={`h-24 flex items-center border-b border-white/5 ${isSidebarExpanded ? 'px-8' : 'px-0 justify-center'}`}>
           {isSidebarExpanded ? (
             <>
@@ -815,9 +819,6 @@ export default function Home() {
             <span className="text-sm font-black tracking-widest text-blue-500">A</span>
           )}
         </div>
-        <button onClick={() => setIsSidebarExpanded(!isSidebarExpanded)} className="absolute top-7 -right-3 w-6 h-6 bg-blue-600 hover:bg-blue-500 rounded-full flex items-center justify-center z-30 shadow-lg transition-all duration-300 border-2 border-slate-950">
-          <svg className={`w-3.5 h-3.5 text-white transition-transform duration-300 ${isSidebarExpanded ? 'rotate-0' : 'rotate-180'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7" /></svg>
-        </button>
 
         {/* Navigation Menu containing EXCLUSIVELY the 4 required options */}
         <nav className="flex-1 px-4 py-8 space-y-2.5">
@@ -890,10 +891,10 @@ export default function Home() {
         {/* ────────────────────────────────────────────────────────────────────────
             VIEW 1: LANÇADOR EM MASSA (Originally Mesa de Operações)
             ──────────────────────────────────────────────────────────────────────── */}
-        <div key={`tab-${abaAtiva}-lancador`} className={`flex-1 overflow-y-auto p-2 md:p-2 scroll-smooth ${abaAtiva === 'lancador' ? 'block animate-fade-in' : 'hidden'}`}>
+        <div key={`tab-${abaAtiva}-lancador`} className={`flex-1 p-2 md:p-2 ${abaAtiva === 'lancador' ? 'block animate-fade-in' : 'hidden'}`}>
           <div className="w-full max-w-[1600px] mx-auto flex flex-col xl:flex-row items-start gap-3">
 
-            <div className="flex-1 w-full min-w-0 space-y-5">
+            <div className="flex-1 w-full min-w-0 space-y-5 h-[calc(100vh-100px)] overflow-hidden flex flex-col">
               {/* Steps indicators */}
               <div className="flex items-center bg-white shadow-sm backdrop-blur-md border border-gray-200 p-3 rounded-2xl shadow-2xl overflow-x-auto custom-scrollbar">
                 {[1, 2, 3, 4, 5, 6].map((num, idx) => (
@@ -911,20 +912,20 @@ export default function Home() {
                 ))}
               </div>
 
-              <GlassPanel className="overflow-hidden">
+              <GlassPanel className="flex-grow overflow-y-auto overflow-x-hidden flex flex-col relative custom-scrollbar">
                 {/* PASSO 1: CONTAS */}
                 {passoAtual === 1 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Selecione as Business Managers e as contas de anúncio onde as campanhas serão criadas.
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                        <div className="flex items-center justify-between mb-8">
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <div className="flex items-center justify-between mb-4">
                           <div>
-                            <h2 className="text-2xl font-bold text-slate-900">Seleção Multi-Contas</h2>
+                            <h2 className="text-xl font-bold text-slate-900">Seleção Multi-Contas</h2>
                             <p className="text-sm font-medium text-slate-500 mt-1">Para onde vamos enviar estas campanhas?</p>
                           </div>
                           {casSelecionadas.length > 0 && (
@@ -944,11 +945,11 @@ export default function Home() {
                             {bms.map(bm => {
                               const isActive = bmExpandida === bm.id;
                               return (
-                                <div key={bm.id} className={`border border-slate-200 rounded-xl p-5 mb-4 hover:border-blue-400 transition-colors ${isActive ? 'border-2 border-blue-600 bg-blue-50/30' : 'bg-white'}`}>
+                                <div key={bm.id} className={`border border-slate-200 rounded-xl p-4 mb-3 hover:border-blue-400 transition-colors ${isActive ? 'border-2 border-blue-600 bg-blue-50/30' : 'bg-white'}`}>
                                   <button type="button" onClick={() => setBmExpandida(isActive ? null : bm.id)} className="w-full flex items-center justify-between outline-none">
-                                    <div className="flex items-center gap-4">
-                                      <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                                        <span className="text-sm font-bold text-blue-600">BM</span>
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+                                        <span className="text-xs font-bold text-blue-600">BM</span>
                                       </div>
                                       <div className="text-left">
                                         <p className="text-lg font-semibold text-slate-900">{bm.name}</p>
@@ -959,12 +960,12 @@ export default function Home() {
                                   </button>
 
                                   {isActive && (
-                                    <div className="mt-5 pt-5 border-t border-slate-200 space-y-3">
+                                    <div className="mt-3 pt-3 border-t border-slate-200 space-y-2">
                                       {bm.contas.map((ca: any) => {
                                         const selecionada = casSelecionadas.find(c => c.caId === ca.id);
                                         return (
                                           <div key={ca.id} className={`rounded-xl border transition-all ${selecionada ? 'border-blue-500 bg-blue-50' : 'border-slate-100 hover:border-slate-300 bg-white'}`}>
-                                            <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-3 px-4 py-3 text-left">
+                                            <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-3 px-3 py-2 text-left">
                                               <div className={`w-6 h-6 rounded flex items-center justify-center shrink-0 border-2 ${selecionada ? 'bg-blue-600 border-blue-600' : 'border-slate-300 bg-white'}`}>
                                                 {selecionada && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>}
                                               </div>
@@ -997,26 +998,26 @@ export default function Home() {
 
                 {/* PASSO 2: ESTRUTURA */}
                 {passoAtual === 2 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Defina as bases: objetivo, dinheiro e multiplicadores.
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                        <div className="mb-8">
-                          <h2 className="text-2xl font-bold text-slate-900">Estrutura da Campanha</h2>
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <div className="mb-4">
+                          <h2 className="text-xl font-bold text-slate-900">Estrutura da Campanha</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configurações principais da sua estrutura</p>
                         </div>
 
-                        <div className="space-y-10">
+                        <div className="space-y-6">
                           {/* Identificação e Objetivo */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">1. Identificação e Objetivo</h3>
-                            <div className="space-y-6">
-                              <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className={inputClass} />
-                              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">1. Identificação e Objetivo</h3>
+                            <div className="space-y-3">
+                              <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
+                              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                                 {OBJETIVOS.map(obj => (
                                   <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-blue-500/5 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-white border-slate-200 hover:border-slate-300'}`}>
                                     <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-blue-600 text-white' : 'bg-white shadow-sm text-slate-500'}`}>{obj.icon}</div>
@@ -1029,8 +1030,8 @@ export default function Home() {
 
                           {/* Painel de Orçamento */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">2. Painel de Orçamento</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">2. Painel de Orçamento</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
                               {/* CBO/ABO */}
                               <div>
                                 <label className="block text-sm font-semibold text-slate-700 mb-2">Distribuição de Verba</label>
@@ -1041,12 +1042,12 @@ export default function Home() {
                               </div>
                               {/* Input Orçamento */}
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Orçamento Diário</label>
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Orçamento Diário</label>
                                 <div className="relative">
-                                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                    <span className="text-slate-500 font-bold text-lg">R$</span>
+                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span className="text-slate-500 font-bold text-sm">R$</span>
                                   </div>
-                                  <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} placeholder="Seu orçamento aqui" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-12 pr-4 py-3 text-lg font-bold text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} placeholder="Seu orçamento aqui" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-3 py-2 text-sm font-bold text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                                 </div>
                               </div>
                             </div>
@@ -1054,34 +1055,35 @@ export default function Home() {
 
                           {/* Multiplicador & Lances */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">3. Multiplicador & Lances</h3>
-                            <div className="grid grid-cols-2 gap-6">
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">3. Multiplicador & Lances</h3>
+                            <div className="grid grid-cols-2 gap-4">
                               {/* Bloco 1: Campanhas */}
-                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Configuração de Campanhas</h3>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Quantidade de Campanhas</label>
-                                <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none" />
+                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Configuração de Campanhas</h3>
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Quantidade de Campanhas</label>
+                                <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
                               </div>
 
                               {/* Bloco 2: Estrutura */}
-                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Definição de Estrutura</h3>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 block">Conjuntos por Camp.</label>
-                                <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none" />
+                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Definição de Estrutura</h3>
+                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Conjuntos por Camp.</label>
+                                <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
                               </div>
                             </div>
 
                             {/* Estratégia de Lance */}
-                            <div className="mt-6">
-                              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-                                <h3 className="text-sm font-bold text-gray-900 mb-6 uppercase tracking-widest border-b border-gray-100 pb-4">Estratégia de Lance</h3>
-                                <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className={inputClass}>
+                            <div className="mt-4">
+                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Estratégia de Lance</h3>
+                                <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner">
                                   {ESTRATEGIAS_LANCE.map(est => <option key={est.value} value={est.value}>{est.label}</option>)}
                                 </select>
                                 {estrategiaLance !== 'LOWEST_COST' && (
-                                  <div className="mt-4 animate-slide-up">
-                                    <label className="text-xs text-slate-500 font-bold uppercase mb-2 block">Valor do Limite / ROAS (R$ / X)</label>
-                                    <input type="number" step="0.1" value={valorLance} onChange={e => setValorLance(e.target.value)} placeholder="Ex: 20.00" className={inputClass} />
+                                  <div className="mt-3 animate-slide-up">
+                                    <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Valor do Limite / ROAS (R$ / X)</label>
+                                    <input type="number" step="0.1" value={valorLance} onChange={e => setValorLance(e.target.value)} placeholder="Ex: 20.00" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
+
                                   </div>
                                 )}
                               </div>
@@ -1096,46 +1098,46 @@ export default function Home() {
 
                 {/* PASSO 3: RASTREAMENTO */}
                 {passoAtual === 3 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Para onde vamos mandar os clientes e como vamos rastrear?
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                        <div className="mb-8">
-                          <h2 className="text-2xl font-bold text-slate-900">Rastreamento & Destino</h2>
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <div className="mb-4">
+                          <h2 className="text-xl font-bold text-slate-900">Rastreamento & Destino</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configure as URLs e o rastreamento via Pixel/UTM.</p>
                         </div>
 
-                        <div className="space-y-10">
+                        <div className="space-y-6">
                           {/* Ponto de Conversão */}
                           <section>
-                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold mb-4">1</div>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-6">Ponto de Conversão</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">1</div>
+                            <h3 className="text-sm font-semibold text-slate-800 mb-3">Ponto de Conversão</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Local de Conversão</label>
-                                <select value={localConversao} onChange={e => setLocalConversao(e.target.value as LocalConversao)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Local de Conversão</label>
+                                <select value={localConversao} onChange={e => setLocalConversao(e.target.value as LocalConversao)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all">
                                   {LOCAIS_CONVERSAO.map(loc => <option key={loc.value} value={loc.value}>{loc.label}</option>)}
                                 </select>
                               </div>
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Link de Destino</label>
-                                <input type="text" value={link} onChange={e => setLink(e.target.value)} placeholder="https://seudominio.com/oferta" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Link de Destino</label>
+                                <input type="text" value={link} onChange={e => setLink(e.target.value)} placeholder="https://seudominio.com/oferta" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                             </div>
 
                             {['WHATSAPP', 'MESSENGER', 'INSTAGRAM_DIRECT'].includes(localConversao) && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 animate-slide-up">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 animate-slide-up">
                                 <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-2">DDI (Código do País)</label>
-                                  <input type="text" value={whatsappDdi} onChange={e => setWhatsappDdi(e.target.value)} placeholder="+55" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  <label className="block text-sm font-semibold text-slate-700 mb-1">DDI (Código do País)</label>
+                                  <input type="text" value={whatsappDdi} onChange={e => setWhatsappDdi(e.target.value)} placeholder="+55" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-2">Número do WhatsApp / Telefone</label>
-                                  <input type="text" value={whatsappNumero} onChange={e => setWhatsappNumero(e.target.value)} placeholder="11999999999" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  <label className="block text-sm font-semibold text-slate-700 mb-1">Número do WhatsApp / Telefone</label>
+                                  <input type="text" value={whatsappNumero} onChange={e => setWhatsappNumero(e.target.value)} placeholder="11999999999" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                                 </div>
                               </div>
                             )}
@@ -1143,16 +1145,16 @@ export default function Home() {
 
                           {/* Inteligência de Dados */}
                           <section>
-                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold mb-4">2</div>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-6">Inteligência de Dados (Pixel & UTM)</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">2</div>
+                            <h3 className="text-sm font-semibold text-slate-800 mb-3">Inteligência de Dados (Pixel & UTM)</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">ID do Pixel Meta</label>
-                                <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-blue-600 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">ID do Pixel Meta</label>
+                                <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-blue-600 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Parâmetros UTM (Sem o ?)</label>
-                                <input type="text" value={parametrosUtm} onChange={e => setParametrosUtm(e.target.value)} placeholder="utm_source=fb&utm_medium=cpc" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Parâmetros UTM (Sem o ?)</label>
+                                <input type="text" value={parametrosUtm} onChange={e => setParametrosUtm(e.target.value)} placeholder="utm_source=fb&utm_medium=cpc" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                             </div>
                           </section>
@@ -1165,35 +1167,35 @@ export default function Home() {
 
                 {/* PASSO 4: PÚBLICO */}
                 {passoAtual === 4 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Quem vai ver os seus anúncios na internet? Configure o público ideal.
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                        <div className="mb-8">
-                          <h2 className="text-2xl font-bold text-slate-900">Público Alvo</h2>
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <div className="mb-4">
+                          <h2 className="text-xl font-bold text-slate-900">Público Alvo</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Defina a demografia e a localização das suas campanhas.</p>
                         </div>
 
-                        <div className="space-y-10">
+                        <div className="space-y-6">
                           {/* Demografia Base */}
                           <section>
-                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Demografia Base</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Demografia Base</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Idade Mínima</label>
-                                <input type="number" min="18" max="65" value={idadeMin} onChange={e => setIdadeMin(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Idade Mínima</label>
+                                <input type="number" min="18" max="65" value={idadeMin} onChange={e => setIdadeMin(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Idade Máxima</label>
-                                <input type="number" min="18" max="65" value={idadeMax} onChange={e => setIdadeMax(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Idade Máxima</label>
+                                <input type="number" min="18" max="65" value={idadeMax} onChange={e => setIdadeMax(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
                               </div>
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Gênero</label>
-                                <select value={genero} onChange={e => setGenero(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Gênero</label>
+                                <select value={genero} onChange={e => setGenero(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
                                   <option value="todos">Todos os Gêneros</option>
                                   <option value="homens">Somente Homens</option>
                                   <option value="mulheres">Somente Mulheres</option>
@@ -1204,12 +1206,12 @@ export default function Home() {
 
                           {/* Localização Geográfica */}
                           <section>
-                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Localização Geográfica</h3>
-                            <div className="flex flex-wrap gap-3">
+                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Localização Geográfica</h3>
+                            <div className="flex flex-wrap gap-2">
                               {PAISES_POPULARES.map(p => {
                                 const isActive = paises.includes(p.value);
                                 return (
-                                  <button key={p.value} onClick={() => togglePais(p.value)} className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-sm border border-blue-600' : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300'}`}>
+                                  <button key={p.value} onClick={() => togglePais(p.value)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-sm border border-blue-600' : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300'}`}>
                                     {p.label}
                                   </button>
                                 );
@@ -1225,47 +1227,47 @@ export default function Home() {
 
                 {/* PASSO 5: IA META */}
                 {passoAtual === 5 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Potencialize seus resultados ativando o algoritmo Advantage+.
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-                        <div className="mb-8">
-                          <h2 className="text-2xl font-bold text-slate-900">Inteligência Meta</h2>
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                        <div className="mb-4">
+                          <h2 className="text-xl font-bold text-slate-900">Inteligência Meta</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Configure os parâmetros da inteligência artificial Advantage+.</p>
                         </div>
 
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between p-5 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-4">
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                            <div className="pr-3">
                               <h4 className="font-semibold text-slate-900">Público Advantage+</h4>
-                              <p className="text-sm text-slate-500 mt-1">A Meta encontrará pessoas fora das suas restrições demográficas se houver alta probabilidade de conversão.</p>
+                              <p className="text-xs text-slate-500 mt-1">A Meta encontrará pessoas fora das suas restrições demográficas se houver alta probabilidade de conversão.</p>
                             </div>
-                            <button type="button" onClick={() => setAdvantageAudience(!advantageAudience)} className={`relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageAudience ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageAudience ? 'translate-x-7' : 'translate-x-0'}`} />
+                            <button type="button" onClick={() => setAdvantageAudience(!advantageAudience)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageAudience ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageAudience ? 'translate-x-5' : 'translate-x-0'}`} />
                             </button>
                           </div>
 
-                          <div className="flex items-center justify-between p-5 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-4">
+                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                            <div className="pr-3">
                               <h4 className="font-semibold text-slate-900">Posicionamentos Advantage+</h4>
-                              <p className="text-sm text-slate-500 mt-1">Distribuição automática e inteligente de orçamento entre Instagram, Facebook, Reels, Stories, etc.</p>
+                              <p className="text-xs text-slate-500 mt-1">Distribuição automática e inteligente de orçamento entre Instagram, Facebook, Reels, Stories, etc.</p>
                             </div>
-                            <button type="button" onClick={() => setAdvantagePlacement(!advantagePlacement)} className={`relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantagePlacement ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantagePlacement ? 'translate-x-7' : 'translate-x-0'}`} />
+                            <button type="button" onClick={() => setAdvantagePlacement(!advantagePlacement)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantagePlacement ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantagePlacement ? 'translate-x-5' : 'translate-x-0'}`} />
                             </button>
                           </div>
 
-                          <div className="flex items-center justify-between p-5 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-4">
+                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                            <div className="pr-3">
                               <h4 className="font-semibold text-slate-900">Criativo Advantage+</h4>
-                              <p className="text-sm text-slate-500 mt-1">Otimiza brilho, contraste e aplica melhorias visuais e textos automáticos na mídia do seu anúncio.</p>
+                              <p className="text-xs text-slate-500 mt-1">Otimiza brilho, contraste e aplica melhorias visuais e textos automáticos na mídia do seu anúncio.</p>
                             </div>
-                            <button type="button" onClick={() => setAdvantageCreative(!advantageCreative)} className={`relative inline-flex h-7 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageCreative ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageCreative ? 'translate-x-7' : 'translate-x-0'}`} />
+                            <button type="button" onClick={() => setAdvantageCreative(!advantageCreative)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageCreative ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageCreative ? 'translate-x-5' : 'translate-x-0'}`} />
                             </button>
                           </div>
                         </div>
@@ -1277,50 +1279,50 @@ export default function Home() {
 
                 {/* PASSO 6: CRIATIVOS */}
                 {passoAtual === 6 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-8 animate-fade-in">
-                    <div className="mb-8 bg-blue-50 text-blue-700 p-4 rounded-xl text-sm font-medium w-full">
+                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
                       <strong>Dica do sistema:</strong> Escreva a copy, importe os arquivos e inicie o lançamento.
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                       {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-8 flex flex-col">
-                        <div className="mb-8">
-                          <h2 className="text-2xl font-bold text-slate-900">Criativos & Disparo</h2>
+                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col">
+                        <div className="mb-4">
+                          <h2 className="text-xl font-bold text-slate-900">Criativos & Disparo</h2>
                           <p className="text-sm font-medium text-slate-500 mt-1">Última etapa. Adicione as mídias e lance suas campanhas.</p>
                         </div>
 
-                        <div className="space-y-8 flex-1">
+                        <div className="space-y-6 flex-1">
                           {/* Seção 1: Seleção de Mídias */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">1. Selecionar Mídias</h3>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                              <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-6 text-center transition-all cursor-pointer group flex flex-col items-center justify-center gap-3">
-                                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">1. Selecionar Mídias</h3>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all cursor-pointer group flex flex-col items-center justify-center gap-2">
+                                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                                   {IconCloud}
                                 </div>
                                 <div>
-                                  <p className="text-sm font-bold text-slate-900 uppercase tracking-widest">Abrir Cofre</p>
-                                  <p className="text-xs font-semibold text-slate-500 mt-1">Biblioteca Nuvem</p>
+                                  <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Abrir Cofre</p>
+                                  <p className="text-[10px] font-semibold text-slate-500 mt-1">Biblioteca Nuvem</p>
                                 </div>
                               </button>
 
-                              <div className="flex-1 relative group cursor-pointer border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-6 text-center transition-all flex flex-col items-center justify-center gap-3">
+                              <div className="flex-1 relative group cursor-pointer border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all flex flex-col items-center justify-center gap-2">
                                 <input type="file" multiple accept="image/*,video/*" onChange={handleImagens} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                <div className="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                 </div>
                                 <div>
-                                  <p className="text-sm font-bold text-slate-900 uppercase tracking-widest">Upload PC</p>
-                                  <p className="text-xs font-semibold text-slate-500 mt-1">Arrastar Arquivos</p>
+                                  <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Upload PC</p>
+                                  <p className="text-[10px] font-semibold text-slate-500 mt-1">Arrastar Arquivos</p>
                                 </div>
                               </div>
                             </div>
 
                             {imagens.length > 0 && (
-                              <div className="mt-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
-                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Fila de Disparo ({imagens.length} Arquivos)</h4>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                              <div className="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Fila de Disparo ({imagens.length} Arquivos)</h4>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                   {imagens.map((file, idx) => (
                                     <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-200 group">
                                       {file.type.startsWith('video/') ? (
@@ -1329,8 +1331,8 @@ export default function Home() {
                                         <img src={previewUrls[idx]} alt="Preview" className="w-full h-full object-cover" />
                                       )}
                                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                                      <span className="absolute bottom-2 left-2 right-2 text-[10px] font-mono text-white truncate z-10">{file.name}</span>
-                                      <button onClick={() => removerImagem(idx)} className="absolute top-2 right-2 w-7 h-7 bg-red-500 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-xs">✕</button>
+                                      <span className="absolute bottom-1 left-2 right-2 text-[8px] font-mono text-white truncate z-10">{file.name}</span>
+                                      <button onClick={() => removerImagem(idx)} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-[10px]">✕</button>
                                     </div>
                                   ))}
                                 </div>
@@ -1340,50 +1342,50 @@ export default function Home() {
 
                           {/* Seção 2: Nomenclatura */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">2. Nomenclatura</h3>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                              <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-4 rounded-xl border-2 transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'arquivo' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
-                                <div className="flex items-center gap-3">
-                                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-blue-600' : 'border-slate-400'}`}>
-                                    {regraNomeacao === 'arquivo' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">2. Nomenclatura</h3>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                              <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'arquivo' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-blue-600' : 'border-slate-400'}`}>
+                                    {regraNomeacao === 'arquivo' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
                                   </div>
-                                  <span className={`text-sm font-bold uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-blue-700' : 'text-slate-700'}`}>Nome do Arquivo</span>
+                                  <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-blue-700' : 'text-slate-700'}`}>Nome do Arquivo</span>
                                 </div>
-                                <span className="text-xs text-slate-500 ml-8">Ex: video_venda.mp4</span>
+                                <span className="text-[10px] text-slate-500 ml-6">Ex: video_venda.mp4</span>
                               </button>
-                              <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-4 rounded-xl border-2 transition-all text-left flex flex-col gap-2 ${regraNomeacao === 'sistema' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
-                                <div className="flex items-center gap-3">
-                                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-600' : 'border-slate-400'}`}>
-                                    {regraNomeacao === 'sistema' && <div className="w-2.5 h-2.5 bg-blue-600 rounded-full" />}
+                              <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'sistema' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-600' : 'border-slate-400'}`}>
+                                    {regraNomeacao === 'sistema' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
                                   </div>
-                                  <span className={`text-sm font-bold uppercase tracking-widest ${regraNomeacao === 'sistema' ? 'text-blue-700' : 'text-slate-700'}`}>Padrão Inteligente</span>
+                                  <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'sistema' ? 'text-blue-700' : 'text-slate-700'}`}>Padrão Inteligente</span>
                                 </div>
-                                <span className="text-xs text-slate-500 ml-8">Ex: [AD 01] - Conversão</span>
+                                <span className="text-[10px] text-slate-500 ml-6">Ex: [AD 01] - Conversão</span>
                               </button>
                             </div>
                           </section>
 
                           {/* Seção 3: Textos do Anúncio (Copy) */}
                           <section>
-                            <h3 className="text-lg font-semibold text-slate-800 mb-4">3. Textos do Anúncio (Copy)</h3>
-                            <div className="space-y-6">
+                            <h3 className="text-sm font-semibold text-slate-800 mb-2">3. Textos do Anúncio (Copy)</h3>
+                            <div className="space-y-4">
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Texto Principal (Copy)</label>
-                                <textarea value={textoAnuncio} onChange={e => setTextoAnuncio(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all min-h-[120px] resize-y outline-none" placeholder="Escreva a copy persuasiva aqui..."></textarea>
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">Texto Principal (Copy)</label>
+                                <textarea value={textoAnuncio} onChange={e => setTextoAnuncio(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all min-h-[80px] resize-y outline-none" placeholder="Escreva a copy persuasiva aqui..."></textarea>
                               </div>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-2">Título (Headline)</label>
-                                  <input type="text" value={titulo} onChange={e => setTitulo(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Método Comprovado" />
+                                  <label className="block text-xs font-semibold text-slate-700 mb-1">Título (Headline)</label>
+                                  <input type="text" value={titulo} onChange={e => setTitulo(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Método Comprovado" />
                                 </div>
                                 <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-2">Descrição (Opcional)</label>
-                                  <input type="text" value={descricao} onChange={e => setDescricao(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Mais de 10.000 alunos" />
+                                  <label className="block text-xs font-semibold text-slate-700 mb-1">Descrição (Opcional)</label>
+                                  <input type="text" value={descricao} onChange={e => setDescricao(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Mais de 10.000 alunos" />
                                 </div>
                               </div>
                               <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Botão de Ação (Call to Action)</label>
-                                <select value={callToAction} onChange={e => setCallToAction(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
+                                <label className="block text-xs font-semibold text-slate-700 mb-1">Botão de Ação (Call to Action)</label>
+                                <select value={callToAction} onChange={e => setCallToAction(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
                                   <option value="SHOP_NOW">Comprar Agora</option>
                                   <option value="LEARN_MORE">Saiba Mais</option>
                                   <option value="SIGN_UP">Cadastre-se</option>
@@ -1396,27 +1398,7 @@ export default function Home() {
                           </section>
                         </div>
 
-                        {/* Botão de Disparo */}
-                        <div className="mt-8 pt-8 border-t border-slate-100">
-                          <button
-                            type="button"
-                            onClick={handleLancar}
-                            disabled={!podeLancar || lancando}
-                            className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white font-extrabold text-xl py-5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                          >
-                            {lancando ? (
-                              <>
-                                <span className="w-6 h-6 rounded-full border-4 border-white/30 border-t-white animate-spin"></span>
-                                Subindo Campanhas...
-                              </>
-                            ) : (
-                              <>
-                                Subir Campanhas!
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                              </>
-                            )}
-                          </button>
-                        </div>
+
                       </div>
 
                     </div>
@@ -1441,23 +1423,43 @@ export default function Home() {
                   </div>
                 )}
 
-                <div className="px-8 py-6 border-t border-gray-200 bg-gray-50/20 flex items-center justify-between">
-                  {passoAtual > 1 ? (<button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="magnetic-btn px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-gray-900 text-sm font-bold uppercase tracking-widest transition-all">← Voltar</button>) : <div />}
-                  {passoAtual < TOTAL_PASSOS && (
-                    <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="magnetic-btn px-4 py-2 bg-white text-black hover:bg-slate-200 disabled:opacity-30 rounded-xl text-sm font-bold uppercase tracking-widest transition-all">Próximo →</button>
+                <div className="px-8 py-6 border-t border-gray-200 bg-white flex items-center justify-between sticky bottom-0 z-20 mt-auto w-full">
+                  {passoAtual > 1 ? (
+                    <button type="button" onClick={() => setPassoAtual(p => Math.max(p - 1, 1))} className="px-8 py-3 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl text-gray-900 text-sm font-black uppercase tracking-widest transition-all">
+                      Voltar
+                    </button>
+                  ) : <div />}
+                  {passoAtual < TOTAL_PASSOS ? (
+                    <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="px-8 py-3 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-30 rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+                      Continuar
+                    </button>
+                  ) : (
+                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] flex items-center gap-2">
+                      {lancando ? (
+                        <>
+                          <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"></span>
+                          Publicando...
+                        </>
+                      ) : (
+                        <>
+                          Publicar
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </>
+                      )}
+                    </button>
                   )}
                 </div>
               </GlassPanel>
             </div>
 
-            <div className="w-full xl:w-[280px] shrink-0 xl:sticky xl:top-28 space-y-4">
-              <div className="antigravity-glass rounded-2xl p-2 shadow-2xl relative overflow-hidden">
-                <h3 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">Poder de Fogo Atual</h3>
-                <div className="flex flex-col gap-3">
-                  <MetricCard label="Contas de Anúncio (CA)" value={casSelecionadas.length} accent="blue" sub="Multi-BM configuradas" />
-                  <MetricCard label="Campanhas Base" value={Number(quantidadeCampanhas) || 0} accent="blue" sub="Por Conta Ativa" />
-                  <MetricCard label="Total Conjuntos" value={totalConjuntos} accent="blue" sub="Volume de disparo" />
-                  <MetricCard label="Mídias p/ Disparo" value={imagens.length} accent="blue" sub="Arquivos na fila" />
+            <div className="w-full xl:w-[220px] shrink-0 xl:sticky xl:top-28 space-y-3">
+              <div className="antigravity-glass rounded-2xl p-4 shadow-2xl relative overflow-hidden">
+                <h3 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">Poder de Fogo Atual</h3>
+                <div className="flex flex-col gap-2">
+                  <MetricCard label="Contas (CA)" value={casSelecionadas.length} accent="blue" sub="Multi-BM" />
+                  <MetricCard label="Campanhas" value={Number(quantidadeCampanhas) || 0} accent="blue" sub="Por Conta" />
+                  <MetricCard label="Conjuntos" value={totalConjuntos} accent="blue" sub="Disparo" />
+                  <MetricCard label="Mídias" value={imagens.length} accent="blue" sub="Na fila" />
                 </div>
               </div>
             </div>
