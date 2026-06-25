@@ -1037,7 +1037,7 @@ export default function Home() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                           
                           <div className="flex flex-col gap-3">
-                            <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase">Nível do Orçamento</label>
+                            <label className="text-blue-400 font-bold tracking-wider uppercase">Nível do Orçamento</label>
                             <div className="inline-flex p-1 bg-slate-100 rounded-lg self-start">
                               <button onClick={() => setTipoCampanha('CBO')} className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'CBO' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Campanha (CBO)</button>
                               <button onClick={() => setTipoCampanha('ABO')} className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'ABO' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Conjunto (ABO)</button>
@@ -1045,7 +1045,7 @@ export default function Home() {
                           </div>
 
                           <div className="flex flex-col gap-3">
-                            <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase">Valor Diário (R$)</label>
+                            <label className="text-blue-400 font-bold tracking-wider uppercase">Valor Diário (R$)</label>
                             <input type="number" placeholder="Seu orçamento aqui" value={orcamento} onChange={e => setOrcamento(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-lg font-bold text-slate-900 focus:border-blue-600 focus:ring-0 transition-colors outline-none" />
                           </div>
 
@@ -1054,28 +1054,28 @@ export default function Home() {
                     </SectionStep>
 
                     <SectionStep num="3" title="Multiplicador & Lances">
-                      <div className="flex flex-col md:flex-row gap-6 w-full">
-                        <div className="flex-1 bg-white shadow-sm p-5 rounded-3xl border border-gray-200 shadow-inner">
-                          <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-4 block">Multiplicador de Estrutura</label>
-                          <div className="flex gap-4">
-                            <div className="flex-1">
-                              <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-2 block">Campanhas</label>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                        <div className="md:col-span-2 bg-white shadow-sm p-5 rounded-3xl border border-gray-200 shadow-inner flex flex-col justify-center">
+                          <label className="text-blue-400 font-bold tracking-wider uppercase mb-4 block">Multiplicador de Estrutura</label>
+                          <div className="grid grid-cols-2 gap-6">
+                            <div>
+                              <label className="text-blue-400 font-bold tracking-wider uppercase mb-2 block">Campanhas</label>
                               <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className={inputClass} />
                             </div>
-                            <div className="flex-1">
-                              <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-2 block">Conjuntos por Campanha</label>
+                            <div>
+                              <label className="text-blue-400 font-bold tracking-wider uppercase mb-2 block">Conjuntos por Campanha</label>
                               <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className={inputClass} />
                             </div>
                           </div>
                         </div>
-                        <div className="flex-1 bg-white shadow-sm p-5 rounded-3xl border border-gray-200 shadow-inner">
-                          <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-4 block">Estratégia de Lance (Bid Strategy)</label>
+                        <div className="md:col-span-1 bg-white shadow-sm p-5 rounded-3xl border border-gray-200 shadow-inner flex flex-col justify-center">
+                          <label className="text-blue-400 font-bold tracking-wider uppercase mb-4 block">Estratégia de Lance (Bid Strategy)</label>
                           <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className={inputClass}>
                             {ESTRATEGIAS_LANCE.map(est => <option key={est.value} value={est.value}>{est.label}</option>)}
                           </select>
                           {estrategiaLance !== 'LOWEST_COST' && (
                             <div className="mt-4 animate-slide-up">
-                              <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-2 block">Valor do Limite / ROAS (R$ / X)</label>
+                              <label className="text-blue-400 font-bold tracking-wider uppercase mb-2 block">Valor do Limite / ROAS (R$ / X)</label>
                               <input type="number" step="0.1" value={valorLance} onChange={e => setValorLance(e.target.value)} placeholder="Ex: 20.00" className={inputClass} />
                             </div>
                           )}
@@ -1304,7 +1304,7 @@ export default function Home() {
 
                           {/* Estratégia de Criação */}
                           <div>
-                            <label className="text-blue-700 font-black tracking-wider drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] uppercase mb-4 block">Estratégia de Criação</label>
+                            <label className="text-blue-400 font-bold tracking-wider uppercase mb-4 block">Estratégia de Criação</label>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <button disabled={imagens.length === 0} onClick={() => setEstrategiaCriacao('CRIAR_ZERO')} className={`p-4 rounded-xl border-2 text-center transition-all ${imagens.length === 0 ? 'opacity-50 cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400' : estrategiaCriacao === 'CRIAR_ZERO' ? 'border-blue-600 bg-blue-50/50 text-blue-600' : 'border-slate-200 bg-slate-50 hover:border-blue-400 text-slate-700'}`}>
                                 <span className="text-sm font-black uppercase tracking-widest">Criar do Zero</span>
