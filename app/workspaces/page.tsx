@@ -1,8 +1,15 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from "react";
 import { signIn, useSession, signOut } from "next-auth/react";
-
+import * as Select from "@radix-ui/react-select";
+import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { motion, AnimatePresence } from "framer-motion";
+import { Combobox } from '@base-ui/react/combobox';
+import { Separator } from "@/components/ui/separator";
+import { StepWrapper } from "@/components/ui/StepWrapper";
+import { PulsatingButton } from "@/components/ui/pulsating-button";
+import { Pointer } from "@/components/ui/pointer";
 /* ────────────────────────────────────────────────────────────────────────
    DESIGN TOKENS — "Antigravity Premium UI"
    Tema: Dark Obsidian & Glowing Crimson
@@ -256,6 +263,22 @@ export default function Home() {
   const [carregandoBMs, setCarregandoBMs] = useState(false);
   const [bmExpandida, setBmExpandida] = useState<string | null>(null);
   const [casSelecionadas, setCasSelecionadas] = useState<CASelecionada[]>([]);
+  const [isCaSelectOpen, setIsCaSelectOpen] = useState(false);
+  const caSelectRef = useRef<HTMLDivElement>(null);
+
+  // --- MOTOR DO COMBOBOX (FILTRADO POR BM) ---
+  const contasDaBmAtiva = React.useMemo(() => {
+    const bmAtual = bms.find(bm => bm.id === bmExpandida);
+    if (!bmAtual) return [];
+
+    return bmAtual.contas.map((ca: any) => ({
+      caId: ca.id,
+      caName: ca.name,
+      bmName: bmAtual.name,
+      bmId: bmAtual.id,
+      paginaId: ca.paginas?.[0]?.id || ""
+    }));
+  }, [bms, bmExpandida]);
 
   // Passo 2
   const [nomeCampanha, setNomeCampanha] = useState("");
@@ -366,6 +389,7 @@ export default function Home() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsDropdownOpen(false);
+      if (caSelectRef.current && !caSelectRef.current.contains(event.target as Node)) setIsCaSelectOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -789,7 +813,7 @@ export default function Home() {
   if (!session) return <LandingPage />;
 
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden relative">
+    <div className="flex h-screen bg-gray-50 text-gray-900 font-sans overflow-hidden relative"><Pointer />
       {toast && (
         <div className={`fixed top-4 right-4 z-50 rounded-lg shadow-lg px-4 py-3 text-sm text-white transition-all ${toast.type === 'error' ? 'bg-red-500' : 'bg-blue-600'}`}>
           {toast.message}
@@ -915,494 +939,715 @@ export default function Home() {
               <GlassPanel className="flex-grow overflow-y-auto overflow-x-hidden flex flex-col relative custom-scrollbar">
                 {/* PASSO 1: CONTAS */}
                 {passoAtual === 1 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Selecione as Business Managers e as contas de anúncio onde as campanhas serão criadas.
-                    </div>
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Selecione as Business Managers e as contas de anúncio onde as campanhas serão criadas.
+                      </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <h2 className="text-xl font-bold text-slate-900">Seleção Multi-Contas</h2>
-                            <p className="text-sm font-medium text-slate-500 mt-1">Para onde vamos enviar estas campanhas?</p>
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <h2 className="text-2xl font-black text-blue-600">Seleção Multi-Contas</h2>
+                              <p className="text-sm font-medium text-slate-500 mt-1">Para onde vamos enviar estas campanhas?</p>
+                            </div>
+                            {casSelecionadas.length > 0 && (
+                              <span className="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-full font-bold text-xs shadow-sm">
+                                {casSelecionadas.length} CA SELECIONADA(S)
+                              </span>
+                            )}
                           </div>
-                          {casSelecionadas.length > 0 && (
-                            <span className="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-full font-bold text-xs shadow-sm">
-                              {casSelecionadas.length} CA SELECIONADA(S)
-                            </span>
+
+                          {carregandoBMs ? (
+                            <div className="flex items-center justify-center py-12 text-slate-500 text-sm font-semibold gap-3">
+                              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                              Sincronizando com a Meta API...
+                            </div>
+                          ) : (
+                            <div className="w-full relative space-y-6">
+
+                              {/* ETAPA 1: SELEÇÃO DE BM */}
+                              <div>
+                                <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                  1. Selecione a Business Manager
+                                </label>
+                                <Combobox.Root
+                                  items={bms}
+                                  value={bms.find(b => b.id === bmExpandida) || null}
+                                  onValueChange={(selecionada: any) => {
+                                    setBmExpandida(selecionada ? selecionada.id : null);
+                                  }}
+                                >
+                                  <div className="w-full flex flex-col gap-1">
+                                    <Combobox.InputGroup className="flex min-h-[52px] w-full cursor-text flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all hover:border-blue-300">
+                                      <div className="flex w-full flex-wrap items-center gap-2">
+                                        {bms.find(b => b.id === bmExpandida) && (
+                                          <div className="group flex items-center gap-1.5 overflow-hidden rounded-md bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-700 border border-blue-200">
+                                            {bms.find(b => b.id === bmExpandida)?.name}
+                                            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setBmExpandida(null); }} className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-white/50 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors cursor-pointer">
+                                              <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeLinecap="square" strokeLinejoin="round" strokeWidth="2.5"><path d="m4.5 4.5 7 7m-7 0 7-7" /></svg>
+                                            </button>
+                                          </div>
+                                        )}
+                                        {!bmExpandida && (
+                                          <Combobox.Input placeholder="Busque e selecione a Business Manager..." className="min-w-[200px] flex-1 border-0 bg-transparent p-1 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400" />
+                                        )}                                      </div>
+                                    </Combobox.InputGroup>
+                                  </div>
+
+                                  <Combobox.Portal>
+                                    <Combobox.Positioner className="z-[999] outline-none" sideOffset={8}>
+                                      <Combobox.Popup className="w-[var(--anchor-width)] max-h-[320px] overflow-y-auto rounded-xl border border-slate-200 bg-white/95 backdrop-blur-md p-2 shadow-2xl outline-none transition-all custom-scrollbar">
+                                        <Combobox.Empty>
+                                          <div className="py-6 text-center text-sm font-medium text-slate-500 flex flex-col items-center gap-2">
+                                            <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                            Nenhuma Business Manager encontrada.
+                                          </div>
+                                        </Combobox.Empty>
+                                        <Combobox.List className="outline-none space-y-1">
+                                          {(bm: any) => {
+                                            const isSelected = bmExpandida === bm.id;
+                                            return (
+                                              <Combobox.Item
+                                                key={bm.id}
+                                                value={bm}
+                                                className="group flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 outline-none hover:bg-blue-50 data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700"
+                                              >
+                                                <span className={`truncate ${isSelected ? 'font-black text-blue-700' : ''}`}>
+                                                  {bm.name}
+                                                </span>
+                                                <div className={`relative flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors shadow-sm ${isSelected ? 'border-blue-500 bg-blue-600' : 'border-slate-300 bg-white'}`}>
+                                                  {isSelected && (
+                                                    <svg className="text-white" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="3"><path d="m2.5 8.5 4 4 7-9" /></svg>
+                                                  )}
+                                                </div>
+                                              </Combobox.Item>
+                                            );
+                                          }}
+                                        </Combobox.List>
+                                      </Combobox.Popup>
+                                    </Combobox.Positioner>
+                                  </Combobox.Portal>
+                                </Combobox.Root>
+                              </div>
+
+                              <Separator className="my-6 bg-slate-800" />
+
+                              {/* ETAPA 2: SELEÇÃO DE CONTAS (COMBOBOX) */}
+                              <div>
+                                <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
+                                  2. Selecione as Contas de Anúncio
+                                </label>
+
+                                <Combobox.Root
+                                  items={contasDaBmAtiva}
+                                  multiple
+                                  value={casSelecionadas}
+                                  onValueChange={(novasContas: any[]) => {
+                                    setCasSelecionadas(novasContas);
+                                  }}
+                                >
+                                  <div className="w-full flex flex-col gap-1">
+                                    <Combobox.InputGroup className="flex min-h-[52px] w-full cursor-text flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-all hover:border-blue-300">
+                                      <Combobox.Chips className="flex w-full flex-wrap items-center gap-2">
+                                        <Combobox.Value>
+                                          {(selectedValues: any[]) => (
+                                            <React.Fragment>
+                                              {selectedValues.map((account) => (
+                                                <Combobox.Chip
+                                                  key={account.caId}
+                                                  className="group flex items-center gap-1.5 overflow-hidden rounded-md bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-700 border border-blue-200 outline-none hover:bg-blue-100 transition-colors"
+                                                >
+                                                  {account.caName}
+                                                  <Combobox.ChipRemove
+                                                    className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-white/50 text-blue-500 hover:bg-blue-500 hover:text-white transition-colors cursor-pointer"
+                                                  >
+                                                    <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeLinecap="square" strokeLinejoin="round" strokeWidth="2.5"><path d="m4.5 4.5 7 7m-7 0 7-7" /></svg>
+                                                  </Combobox.ChipRemove>
+                                                </Combobox.Chip>
+                                              ))}
+                                              <Combobox.Input
+                                                placeholder={selectedValues.length > 0 ? '' : 'Busque e selecione as contas...'}
+                                                className="min-w-[200px] flex-1 border-0 bg-transparent p-1 text-sm font-medium text-slate-900 outline-none placeholder:text-slate-400"
+                                              />
+                                            </React.Fragment>
+                                          )}
+                                        </Combobox.Value>
+                                      </Combobox.Chips>
+                                    </Combobox.InputGroup>
+                                  </div>
+
+                                  <Combobox.Portal>
+                                    <Combobox.Positioner className="z-[999] outline-none" sideOffset={8}>
+                                      <Combobox.Popup className="w-[var(--anchor-width)] max-h-[320px] overflow-y-auto rounded-xl border border-slate-200 bg-white/95 backdrop-blur-md p-2 shadow-2xl outline-none transition-all custom-scrollbar">
+                                        <Combobox.Empty>
+                                          <div className="py-6 text-center text-sm font-medium text-slate-500 flex flex-col items-center gap-2">
+                                            <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                            Nenhuma conta encontrada nesta BM.
+                                          </div>
+                                        </Combobox.Empty>
+                                        <Combobox.List className="outline-none space-y-1">
+                                          {(account: any) => {
+                                            const isSelected = casSelecionadas.some(c => c.caId === account.caId);
+                                            return (
+                                              <Combobox.Item
+                                                key={account.caId}
+                                                value={account}
+                                                className="group flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 outline-none hover:bg-blue-50 data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700"
+                                              >
+                                                <span className={`truncate ${isSelected ? 'font-black text-blue-700' : ''}`}>
+                                                  {account.caName}
+                                                </span>
+                                                <div className={`relative flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors shadow-sm ${isSelected ? 'border-blue-500 bg-blue-600' : 'border-slate-300 bg-white'}`}>
+                                                  {isSelected && (
+                                                    <svg className="text-white" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="3"><path d="m2.5 8.5 4 4 7-9" /></svg>
+                                                  )}
+                                                </div>
+                                              </Combobox.Item>
+                                            );
+                                          }}
+                                        </Combobox.List>
+                                      </Combobox.Popup>
+                                    </Combobox.Positioner>
+                                  </Combobox.Portal>
+                                </Combobox.Root>
+                              </div>
+
+                              {casSelecionadas.length > 0 && (
+                                <div className="mt-4 p-4 border border-blue-100 bg-blue-50/50 rounded-xl animate-fade-in space-y-4">
+                                  {casSelecionadas.map(selecionada => {
+                                    let selecionadaFull: any = null;
+                                    bms.forEach(bm => {
+                                      const found = bm.contas.find((c: any) => c.id === selecionada.caId);
+                                      if (found) selecionadaFull = found;
+                                    });
+
+                                    return (
+                                      <div key={selecionada.caId} className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                                        <p className="text-xs font-bold text-slate-800 mb-2">{selecionada.caName}</p>
+                                        {selecionadaFull && selecionadaFull.paginas?.length > 0 ? (
+                                          <div>
+                                            <label className="block text-xs font-black text-slate-700 uppercase tracking-widest mb-1">Página Vinculada</label>
+                                            <select
+                                              value={selecionada.paginaId}
+                                              onChange={e => setPaginaCA(selecionada.caId, e.target.value)}
+                                              className="w-full bg-slate-50 border border-slate-200 rounded-md px-2 py-1.5 text-xs font-medium text-slate-700 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                                            >
+                                              {selecionadaFull.paginas.map((p: any) => (
+                                                <option key={p.id} value={p.id}>{p.name}</option>
+                                              ))}
+                                            </select>
+                                          </div>
+                                        ) : (
+                                          <p className="text-[10px] font-medium text-slate-500">Nenhuma página do Facebook vinculada a esta conta.</p>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
                           )}
                         </div>
 
-                        {carregandoBMs ? (
-                          <div className="flex items-center justify-center py-12 text-slate-500 text-sm font-semibold gap-3">
-                            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                            Sincronizando com a Meta API...
-                          </div>
-                        ) : (
-                          <div className="max-h-[500px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
-                            {bms.map(bm => {
-                              const isActive = bmExpandida === bm.id;
-                              return (
-                                <div key={bm.id} className={`border border-slate-200 rounded-xl p-4 mb-3 hover:border-blue-400 transition-colors ${isActive ? 'border-2 border-blue-600 bg-blue-50/30' : 'bg-white'}`}>
-                                  <button type="button" onClick={() => setBmExpandida(isActive ? null : bm.id)} className="w-full flex items-center justify-between outline-none">
-                                    <div className="flex items-center gap-3">
-                                      <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-                                        <span className="text-xs font-bold text-blue-600">BM</span>
-                                      </div>
-                                      <div className="text-left">
-                                        <p className="text-lg font-semibold text-slate-900">{bm.name}</p>
-                                        <p className="text-xs text-slate-500 font-medium uppercase mt-1 tracking-wider">{bm.contas.length} Contas</p>
-                                      </div>
-                                    </div>
-                                    <svg className={`w-6 h-6 text-slate-400 transition-transform ${isActive ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
-                                  </button>
-
-                                  {isActive && (
-                                    <div className="mt-3 pt-3 border-t border-slate-200 space-y-2">
-                                      {bm.contas.map((ca: any) => {
-                                        const selecionada = casSelecionadas.find(c => c.caId === ca.id);
-                                        return (
-                                          <div key={ca.id} className={`rounded-xl border transition-all ${selecionada ? 'border-blue-500 bg-blue-50' : 'border-slate-100 hover:border-slate-300 bg-white'}`}>
-                                            <button type="button" onClick={() => toggleCA(ca, bm)} className="w-full flex items-center gap-3 px-3 py-2 text-left">
-                                              <div className={`w-6 h-6 rounded flex items-center justify-center shrink-0 border-2 ${selecionada ? 'bg-blue-600 border-blue-600' : 'border-slate-300 bg-white'}`}>
-                                                {selecionada && <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>}
-                                              </div>
-                                              <div className="flex-1 min-w-0">
-                                                <p className={`text-base font-medium truncate ${selecionada ? 'text-blue-900' : 'text-slate-700'}`}>{ca.name}</p>
-                                              </div>
-                                            </button>
-                                            {selecionada && ca.paginas?.length > 0 && (
-                                              <div className="px-5 pb-4 ml-9">
-                                                <select value={selecionada.paginaId} onChange={e => setPaginaCA(ca.id, e.target.value)} onClick={e => e.stopPropagation()} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
-                                                  {ca.paginas.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
-                                                </select>
-                                              </div>
-                                            )}
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        )}
                       </div>
-
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {/* PASSO 2: ESTRUTURA */}
                 {passoAtual === 2 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Defina as bases: objetivo, dinheiro e multiplicadores.
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                        <div className="mb-4">
-                          <h2 className="text-xl font-bold text-slate-900">Estrutura da Campanha</h2>
-                          <p className="text-sm font-medium text-slate-500 mt-1">Configurações principais da sua estrutura</p>
-                        </div>
-
-                        <div className="space-y-6">
-                          {/* Identificação e Objetivo */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">1. Identificação e Objetivo</h3>
-                            <div className="space-y-3">
-                              <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
-                              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                                {OBJETIVOS.map(obj => (
-                                  <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-blue-500/5 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-white border-slate-200 hover:border-slate-300'}`}>
-                                    <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-blue-600 text-white' : 'bg-white shadow-sm text-slate-500'}`}>{obj.icon}</div>
-                                    <p className={`text-[10px] font-black tracking-widest uppercase text-center ${objetivo === obj.value ? 'text-slate-900' : 'text-slate-500'}`}>{obj.label}</p>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          </section>
-
-                          {/* Painel de Orçamento */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">2. Painel de Orçamento</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                              {/* CBO/ABO */}
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Distribuição de Verba</label>
-                                <div className="inline-flex p-1 bg-slate-100 rounded-lg w-full sm:w-auto">
-                                  <button onClick={() => setTipoCampanha('CBO')} className={`flex-1 px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'CBO' ? 'shadow-sm bg-white text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Campanha (CBO)</button>
-                                  <button onClick={() => setTipoCampanha('ABO')} className={`flex-1 px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'ABO' ? 'shadow-sm bg-white text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Conjunto (ABO)</button>
-                                </div>
-                              </div>
-                              {/* Input Orçamento */}
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Orçamento Diário</label>
-                                <div className="relative">
-                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-slate-500 font-bold text-sm">R$</span>
-                                  </div>
-                                  <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} placeholder="Seu orçamento aqui" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-3 py-2 text-sm font-bold text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                                </div>
-                              </div>
-                            </div>
-                          </section>
-
-                          {/* Multiplicador & Lances */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">3. Multiplicador & Lances</h3>
-                            <div className="grid grid-cols-2 gap-4">
-                              {/* Bloco 1: Campanhas */}
-                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Configuração de Campanhas</h3>
-                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Quantidade de Campanhas</label>
-                                <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
-                              </div>
-
-                              {/* Bloco 2: Estrutura */}
-                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Definição de Estrutura</h3>
-                                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Conjuntos por Camp.</label>
-                                <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
-                              </div>
-                            </div>
-
-                            {/* Estratégia de Lance */}
-                            <div className="mt-4">
-                              <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
-                                <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Estratégia de Lance</h3>
-                                <select value={estrategiaLance} onChange={e => setEstrategiaLance(e.target.value as EstrategiaLance)} className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner">
-                                  {ESTRATEGIAS_LANCE.map(est => <option key={est.value} value={est.value}>{est.label}</option>)}
-                                </select>
-                                {estrategiaLance !== 'LOWEST_COST' && (
-                                  <div className="mt-3 animate-slide-up">
-                                    <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Valor do Limite / ROAS (R$ / X)</label>
-                                    <input type="number" step="0.1" value={valorLance} onChange={e => setValorLance(e.target.value)} placeholder="Ex: 20.00" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
-
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </section>
-                        </div>
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Defina as bases: objetivo, dinheiro e multiplicadores.
                       </div>
 
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                          <div className="mb-4">
+                            <h2 className="text-2xl font-black text-blue-600">Estrutura da Campanha</h2>
+                            <p className="text-sm font-medium text-slate-500 mt-1">Configurações principais da sua estrutura</p>
+                          </div>
+
+                          <div className="space-y-6">
+                            {/* Identificação e Objetivo */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">1. Identificação e Objetivo</h3>
+                              <div className="space-y-3">
+                                <input type="text" value={nomeCampanha} onChange={e => setNomeCampanha(e.target.value)} placeholder="Nome Base (Ex: [VENDAS] Produto X)" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
+                                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                                  {OBJETIVOS.map(obj => (
+                                    <button key={obj.value} onClick={() => setObjetivo(obj.value as Objetivo)} className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${objetivo === obj.value ? 'bg-blue-500/5 border-blue-600 shadow-[0_0_15px_rgba(59,130,246,0.1)]' : 'bg-white border-slate-200 hover:border-slate-300'}`}>
+                                      <div className={`w-10 h-10 rounded-xl mb-3 flex items-center justify-center ${objetivo === obj.value ? 'bg-blue-600 text-white' : 'bg-white shadow-sm text-slate-500'}`}>{obj.icon}</div>
+                                      <p className={`text-[10px] font-black tracking-widest uppercase text-center ${objetivo === obj.value ? 'text-slate-900' : 'text-slate-500'}`}>{obj.label}</p>
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Painel de Orçamento */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">2. Painel de Orçamento</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                                {/* CBO/ABO */}
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-2">Distribuição de Verba</label>
+                                  <div className="inline-flex p-1 bg-slate-100 rounded-lg w-full sm:w-auto">
+                                    <button onClick={() => setTipoCampanha('CBO')} className={`flex-1 px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'CBO' ? 'shadow-sm bg-white text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Campanha (CBO)</button>
+                                    <button onClick={() => setTipoCampanha('ABO')} className={`flex-1 px-6 py-2 rounded-md text-sm font-medium transition-all ${tipoCampanha === 'ABO' ? 'shadow-sm bg-white text-blue-600' : 'text-slate-500 hover:text-slate-700'}`}>Conjunto (ABO)</button>
+                                  </div>
+                                </div>
+                                {/* Input Orçamento */}
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Orçamento Diário</label>
+                                  <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                      <span className="text-slate-500 font-bold text-sm">R$</span>
+                                    </div>
+                                    <input type="number" value={orcamento} onChange={e => setOrcamento(e.target.value)} placeholder="Seu orçamento aqui" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl pl-10 pr-3 py-2 text-sm font-bold text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  </div>
+                                </div>
+                              </div>
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Multiplicador & Lances */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">3. Multiplicador & Lances</h3>
+                              <div className="grid grid-cols-2 gap-4">
+                                {/* Bloco 1: Campanhas */}
+                                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                  <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Configuração de Campanhas</h3>
+                                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Quantidade de Campanhas</label>
+                                  <input type="number" min="1" value={quantidadeCampanhas} onChange={e => setQuantidadeCampanhas(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
+                                </div>
+
+                                {/* Bloco 2: Estrutura */}
+                                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                  <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Definição de Estrutura</h3>
+                                  <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Conjuntos por Camp.</label>
+                                  <input type="number" min="1" value={quantidadeConjuntos} onChange={e => setQuantidadeConjuntos(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 outline-none" />
+                                </div>
+                              </div>
+
+                              {/* Estratégia de Lance */}
+                              <div className="mt-4">
+                                <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+                                  <h3 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-widest border-b border-gray-100 pb-2">Estratégia de Lance</h3>
+                                  <Select.Root value={estrategiaLance} onValueChange={(v) => setEstrategiaLance(v as EstrategiaLance)}>
+                                    <Select.Trigger className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 hover:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none shadow-inner">
+                                      <Select.Value />
+                                      <Select.Icon><ChevronDownIcon className="text-gray-500" /></Select.Icon>
+                                    </Select.Trigger>
+                                    <Select.Portal>
+                                      <Select.Content className="overflow-hidden bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-slate-200 z-[999] animate-slide-up">
+                                        <Select.Viewport className="p-2">
+                                          {ESTRATEGIAS_LANCE.map(est => (
+                                            <Select.Item key={est.value} value={est.value} className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                              <Select.ItemText>{est.label}</Select.ItemText>
+                                              <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                            </Select.Item>
+                                          ))}
+                                        </Select.Viewport>
+                                      </Select.Content>
+                                    </Select.Portal>
+                                  </Select.Root>
+                                  {estrategiaLance !== 'LOWEST_COST' && (
+                                    <div className="mt-3 animate-slide-up">
+                                      <label className="text-[10px] text-slate-500 font-bold uppercase mb-1 block">Valor do Limite / ROAS (R$ / X)</label>
+                                      <input type="number" step="0.1" value={valorLance} onChange={e => setValorLance(e.target.value)} placeholder="Ex: 20.00" className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm font-bold text-gray-900 focus:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all outline-none placeholder:text-gray-400 shadow-inner" />
+
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {/* PASSO 3: RASTREAMENTO */}
                 {passoAtual === 3 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Para onde vamos mandar os clientes e como vamos rastrear?
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                        <div className="mb-4">
-                          <h2 className="text-xl font-bold text-slate-900">Rastreamento & Destino</h2>
-                          <p className="text-sm font-medium text-slate-500 mt-1">Configure as URLs e o rastreamento via Pixel/UTM.</p>
-                        </div>
-
-                        <div className="space-y-6">
-                          {/* Ponto de Conversão */}
-                          <section>
-                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">1</div>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-3">Ponto de Conversão</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Local de Conversão</label>
-                                <select value={localConversao} onChange={e => setLocalConversao(e.target.value as LocalConversao)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all">
-                                  {LOCAIS_CONVERSAO.map(loc => <option key={loc.value} value={loc.value}>{loc.label}</option>)}
-                                </select>
-                              </div>
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Link de Destino</label>
-                                <input type="text" value={link} onChange={e => setLink(e.target.value)} placeholder="https://seudominio.com/oferta" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                              </div>
-                            </div>
-
-                            {['WHATSAPP', 'MESSENGER', 'INSTAGRAM_DIRECT'].includes(localConversao) && (
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 animate-slide-up">
-                                <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-1">DDI (Código do País)</label>
-                                  <input type="text" value={whatsappDdi} onChange={e => setWhatsappDdi(e.target.value)} placeholder="+55" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                                </div>
-                                <div>
-                                  <label className="block text-sm font-semibold text-slate-700 mb-1">Número do WhatsApp / Telefone</label>
-                                  <input type="text" value={whatsappNumero} onChange={e => setWhatsappNumero(e.target.value)} placeholder="11999999999" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                                </div>
-                              </div>
-                            )}
-                          </section>
-
-                          {/* Inteligência de Dados */}
-                          <section>
-                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">2</div>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-3">Inteligência de Dados (Pixel & UTM)</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">ID do Pixel Meta</label>
-                                <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-blue-600 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                              </div>
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Parâmetros UTM (Sem o ?)</label>
-                                <input type="text" value={parametrosUtm} onChange={e => setParametrosUtm(e.target.value)} placeholder="utm_source=fb&utm_medium=cpc" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                              </div>
-                            </div>
-                          </section>
-                        </div>
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Para onde vamos mandar os clientes e como vamos rastrear?
                       </div>
 
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                          <div className="mb-4">
+                            <h2 className="text-2xl font-black text-blue-600">Rastreamento & Destino</h2>
+                            <p className="text-sm font-medium text-slate-500 mt-1">Configure as URLs e o rastreamento via Pixel/UTM.</p>
+                          </div>
+
+                          <div className="space-y-6">
+                            {/* Ponto de Conversão */}
+                            <section>
+                              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">1</div>
+                              <h3 className="text-base font-bold text-slate-900 mb-3">Ponto de Conversão</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Local de Conversão</label>
+                                  <Select.Root value={localConversao} onValueChange={(v) => setLocalConversao(v as LocalConversao)}>
+                                    <Select.Trigger className="w-full flex items-center justify-between bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 hover:border-blue-500 focus:border-blue-600 transition-all outline-none">
+                                      <Select.Value />
+                                      <Select.Icon><ChevronDownIcon className="text-gray-500" /></Select.Icon>
+                                    </Select.Trigger>
+                                    <Select.Portal>
+                                      <Select.Content className="overflow-hidden bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-slate-200 z-[999] animate-slide-up">
+                                        <Select.Viewport className="p-2">
+                                          {LOCAIS_CONVERSAO.map(loc => (
+                                            <Select.Item key={loc.value} value={loc.value} className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                              <Select.ItemText>{loc.label}</Select.ItemText>
+                                              <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                            </Select.Item>
+                                          ))}
+                                        </Select.Viewport>
+                                      </Select.Content>
+                                    </Select.Portal>
+                                  </Select.Root>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Link de Destino</label>
+                                  <input type="text" value={link} onChange={e => setLink(e.target.value)} placeholder="https://seudominio.com/oferta" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                </div>
+                              </div>
+
+                              {['WHATSAPP', 'MESSENGER', 'INSTAGRAM_DIRECT'].includes(localConversao) && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 animate-slide-up">
+                                  <div>
+                                    <label className="block text-sm font-bold text-slate-900 mb-1">DDI (Código do País)</label>
+                                    <input type="text" value={whatsappDdi} onChange={e => setWhatsappDdi(e.target.value)} placeholder="+55" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-bold text-slate-900 mb-1">Número do WhatsApp / Telefone</label>
+                                    <input type="text" value={whatsappNumero} onChange={e => setWhatsappNumero(e.target.value)} placeholder="11999999999" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                  </div>
+                                </div>
+                              )}
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Inteligência de Dados */}
+                            <section>
+                              <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs mb-3">2</div>
+                              <h3 className="text-base font-bold text-slate-900 mb-3">Inteligência de Dados (Pixel & UTM)</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">ID do Pixel Meta</label>
+                                  <input type="text" value={pixelId} onChange={handlePixelId} placeholder="123456789098765" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-blue-600 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Parâmetros UTM (Sem o ?)</label>
+                                  <input type="text" value={parametrosUtm} onChange={e => setParametrosUtm(e.target.value)} placeholder="utm_source=fb&utm_medium=cpc" className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 font-mono focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {/* PASSO 4: PÚBLICO */}
                 {passoAtual === 4 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Quem vai ver os seus anúncios na internet? Configure o público ideal.
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                        <div className="mb-4">
-                          <h2 className="text-xl font-bold text-slate-900">Público Alvo</h2>
-                          <p className="text-sm font-medium text-slate-500 mt-1">Defina a demografia e a localização das suas campanhas.</p>
-                        </div>
-
-                        <div className="space-y-6">
-                          {/* Demografia Base */}
-                          <section>
-                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Demografia Base</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Idade Mínima</label>
-                                <input type="number" min="18" max="65" value={idadeMin} onChange={e => setIdadeMin(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                              </div>
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Idade Máxima</label>
-                                <input type="number" min="18" max="65" value={idadeMax} onChange={e => setIdadeMax(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
-                              </div>
-                              <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-1">Gênero</label>
-                                <select value={genero} onChange={e => setGenero(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
-                                  <option value="todos">Todos os Gêneros</option>
-                                  <option value="homens">Somente Homens</option>
-                                  <option value="mulheres">Somente Mulheres</option>
-                                </select>
-                              </div>
-                            </div>
-                          </section>
-
-                          {/* Localização Geográfica */}
-                          <section>
-                            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Localização Geográfica</h3>
-                            <div className="flex flex-wrap gap-2">
-                              {PAISES_POPULARES.map(p => {
-                                const isActive = paises.includes(p.value);
-                                return (
-                                  <button key={p.value} onClick={() => togglePais(p.value)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-sm border border-blue-600' : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300'}`}>
-                                    {p.label}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </section>
-                        </div>
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Quem vai ver os seus anúncios na internet? Configure o público ideal.
                       </div>
 
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                          <div className="mb-4">
+                            <h2 className="text-2xl font-black text-blue-600">Público Alvo</h2>
+                            <p className="text-sm font-medium text-slate-500 mt-1">Defina a demografia e a localização das suas campanhas.</p>
+                          </div>
+
+                          <div className="space-y-6">
+                            {/* Demografia Base */}
+                            <section>
+                              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Demografia Base</h3>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Idade Mínima</label>
+                                  <input type="number" min="18" max="65" value={idadeMin} onChange={e => setIdadeMin(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Idade Máxima</label>
+                                  <input type="number" min="18" max="65" value={idadeMax} onChange={e => setIdadeMax(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" />
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Gênero</label>
+                                  <Select.Root value={genero} onValueChange={setGenero}>
+                                    <Select.Trigger className="w-full flex items-center justify-between bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 hover:border-blue-500 focus:border-blue-600 transition-all outline-none">
+                                      <Select.Value />
+                                      <Select.Icon><ChevronDownIcon className="text-gray-500" /></Select.Icon>
+                                    </Select.Trigger>
+                                    <Select.Portal>
+                                      <Select.Content className="overflow-hidden bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-slate-200 z-[999] animate-slide-up">
+                                        <Select.Viewport className="p-2">
+                                          <Select.Item value="todos" className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                            <Select.ItemText>Todos os Gêneros</Select.ItemText>
+                                            <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                          </Select.Item>
+                                          <Select.Item value="homens" className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                            <Select.ItemText>Somente Homens</Select.ItemText>
+                                            <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                          </Select.Item>
+                                          <Select.Item value="mulheres" className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                            <Select.ItemText>Somente Mulheres</Select.ItemText>
+                                            <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                          </Select.Item>
+                                        </Select.Viewport>
+                                      </Select.Content>
+                                    </Select.Portal>
+                                  </Select.Root>
+                                </div>
+                              </div>
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Localização Geográfica */}
+                            <section>
+                              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Localização Geográfica</h3>
+                              <div className="flex flex-wrap gap-2">
+                                {PAISES_POPULARES.map(p => {
+                                  const isActive = paises.includes(p.value);
+                                  return (
+                                    <button key={p.value} onClick={() => togglePais(p.value)} className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${isActive ? 'bg-blue-600 text-white shadow-sm border border-blue-600' : 'bg-slate-50 border border-slate-200 text-slate-600 hover:border-slate-300'}`}>
+                                      {p.label}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </section>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {/* PASSO 5: IA META */}
                 {passoAtual === 5 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Potencialize seus resultados ativando o algoritmo Advantage+.
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-                        <div className="mb-4">
-                          <h2 className="text-xl font-bold text-slate-900">Inteligência Meta</h2>
-                          <p className="text-sm font-medium text-slate-500 mt-1">Configure os parâmetros da inteligência artificial Advantage+.</p>
-                        </div>
-
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-3">
-                              <h4 className="font-semibold text-slate-900">Público Advantage+</h4>
-                              <p className="text-xs text-slate-500 mt-1">A Meta encontrará pessoas fora das suas restrições demográficas se houver alta probabilidade de conversão.</p>
-                            </div>
-                            <button type="button" onClick={() => setAdvantageAudience(!advantageAudience)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageAudience ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageAudience ? 'translate-x-5' : 'translate-x-0'}`} />
-                            </button>
-                          </div>
-
-                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-3">
-                              <h4 className="font-semibold text-slate-900">Posicionamentos Advantage+</h4>
-                              <p className="text-xs text-slate-500 mt-1">Distribuição automática e inteligente de orçamento entre Instagram, Facebook, Reels, Stories, etc.</p>
-                            </div>
-                            <button type="button" onClick={() => setAdvantagePlacement(!advantagePlacement)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantagePlacement ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantagePlacement ? 'translate-x-5' : 'translate-x-0'}`} />
-                            </button>
-                          </div>
-
-                          <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
-                            <div className="pr-3">
-                              <h4 className="font-semibold text-slate-900">Criativo Advantage+</h4>
-                              <p className="text-xs text-slate-500 mt-1">Otimiza brilho, contraste e aplica melhorias visuais e textos automáticos na mídia do seu anúncio.</p>
-                            </div>
-                            <button type="button" onClick={() => setAdvantageCreative(!advantageCreative)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageCreative ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                              <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageCreative ? 'translate-x-5' : 'translate-x-0'}`} />
-                            </button>
-                          </div>
-                        </div>
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Potencialize seus resultados ativando o algoritmo Advantage+.
                       </div>
 
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+                          <div className="mb-4">
+                            <h2 className="text-2xl font-black text-blue-600">Inteligência Meta</h2>
+                            <p className="text-sm font-medium text-slate-500 mt-1">Configure os parâmetros da inteligência artificial Advantage+.</p>
+                          </div>
+
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                              <div className="pr-3">
+                                <h4 className="font-black text-slate-900">Público Advantage+</h4>
+                                <p className="text-xs text-slate-500 mt-1">A Meta encontrará pessoas fora das suas restrições demográficas se houver alta probabilidade de conversão.</p>
+                              </div>
+                              <button type="button" onClick={() => setAdvantageAudience(!advantageAudience)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageAudience ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                                <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageAudience ? 'translate-x-5' : 'translate-x-0'}`} />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                              <div className="pr-3">
+                                <h4 className="font-black text-slate-900">Posicionamentos Advantage+</h4>
+                                <p className="text-xs text-slate-500 mt-1">Distribuição automática e inteligente de orçamento entre Instagram, Facebook, Reels, Stories, etc.</p>
+                              </div>
+                              <button type="button" onClick={() => setAdvantagePlacement(!advantagePlacement)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantagePlacement ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                                <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantagePlacement ? 'translate-x-5' : 'translate-x-0'}`} />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50/50 hover:border-blue-200 transition-all duration-300">
+                              <div className="pr-3">
+                                <h4 className="font-black text-slate-900">Criativo Advantage+</h4>
+                                <p className="text-xs text-slate-500 mt-1">Otimiza brilho, contraste e aplica melhorias visuais e textos automáticos na mídia do seu anúncio.</p>
+                              </div>
+                              <button type="button" onClick={() => setAdvantageCreative(!advantageCreative)} className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${advantageCreative ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                                <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${advantageCreative ? 'translate-x-5' : 'translate-x-0'}`} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {/* PASSO 6: CRIATIVOS */}
                 {passoAtual === 6 && (
-                  <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
-                    <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
-                      <strong>Dica do sistema:</strong> Escreva a copy, importe os arquivos e inicie o lançamento.
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                      {/* MAIN CARD (8 colunas) */}
-                      <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col">
-                        <div className="mb-4">
-                          <h2 className="text-xl font-bold text-slate-900">Criativos & Disparo</h2>
-                          <p className="text-sm font-medium text-slate-500 mt-1">Última etapa. Adicione as mídias e lance suas campanhas.</p>
-                        </div>
-
-                        <div className="space-y-6 flex-1">
-                          {/* Seção 1: Seleção de Mídias */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">1. Selecionar Mídias</h3>
-                            <div className="flex flex-col sm:flex-row gap-3">
-                              <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all cursor-pointer group flex flex-col items-center justify-center gap-2">
-                                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                  {IconCloud}
-                                </div>
-                                <div>
-                                  <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Abrir Cofre</p>
-                                  <p className="text-[10px] font-semibold text-slate-500 mt-1">Biblioteca Nuvem</p>
-                                </div>
-                              </button>
-
-                              <div className="flex-1 relative group cursor-pointer border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all flex flex-col items-center justify-center gap-2">
-                                <input type="file" multiple accept="image/*,video/*" onChange={handleImagens} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-                                </div>
-                                <div>
-                                  <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Upload PC</p>
-                                  <p className="text-[10px] font-semibold text-slate-500 mt-1">Arrastar Arquivos</p>
-                                </div>
-                              </div>
-                            </div>
-
-                            {imagens.length > 0 && (
-                              <div className="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-3">
-                                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Fila de Disparo ({imagens.length} Arquivos)</h4>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                  {imagens.map((file, idx) => (
-                                    <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-200 group">
-                                      {file.type.startsWith('video/') ? (
-                                        <video src={previewUrls[idx]} className="w-full h-full object-cover" autoPlay muted loop playsInline />
-                                      ) : (
-                                        <img src={previewUrls[idx]} alt="Preview" className="w-full h-full object-cover" />
-                                      )}
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-                                      <span className="absolute bottom-1 left-2 right-2 text-[8px] font-mono text-white truncate z-10">{file.name}</span>
-                                      <button onClick={() => removerImagem(idx)} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-[10px]">✕</button>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </section>
-
-                          {/* Seção 2: Nomenclatura */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">2. Nomenclatura</h3>
-                            <div className="flex flex-col sm:flex-row gap-3">
-                              <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'arquivo' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
-                                <div className="flex items-center gap-2">
-                                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-blue-600' : 'border-slate-400'}`}>
-                                    {regraNomeacao === 'arquivo' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
-                                  </div>
-                                  <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-blue-700' : 'text-slate-700'}`}>Nome do Arquivo</span>
-                                </div>
-                                <span className="text-[10px] text-slate-500 ml-6">Ex: video_venda.mp4</span>
-                              </button>
-                              <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'sistema' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
-                                <div className="flex items-center gap-2">
-                                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-600' : 'border-slate-400'}`}>
-                                    {regraNomeacao === 'sistema' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
-                                  </div>
-                                  <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'sistema' ? 'text-blue-700' : 'text-slate-700'}`}>Padrão Inteligente</span>
-                                </div>
-                                <span className="text-[10px] text-slate-500 ml-6">Ex: [AD 01] - Conversão</span>
-                              </button>
-                            </div>
-                          </section>
-
-                          {/* Seção 3: Textos do Anúncio (Copy) */}
-                          <section>
-                            <h3 className="text-sm font-semibold text-slate-800 mb-2">3. Textos do Anúncio (Copy)</h3>
-                            <div className="space-y-4">
-                              <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Texto Principal (Copy)</label>
-                                <textarea value={textoAnuncio} onChange={e => setTextoAnuncio(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all min-h-[80px] resize-y outline-none" placeholder="Escreva a copy persuasiva aqui..."></textarea>
-                              </div>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-xs font-semibold text-slate-700 mb-1">Título (Headline)</label>
-                                  <input type="text" value={titulo} onChange={e => setTitulo(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Método Comprovado" />
-                                </div>
-                                <div>
-                                  <label className="block text-xs font-semibold text-slate-700 mb-1">Descrição (Opcional)</label>
-                                  <input type="text" value={descricao} onChange={e => setDescricao(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Mais de 10.000 alunos" />
-                                </div>
-                              </div>
-                              <div>
-                                <label className="block text-xs font-semibold text-slate-700 mb-1">Botão de Ação (Call to Action)</label>
-                                <select value={callToAction} onChange={e => setCallToAction(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none">
-                                  <option value="SHOP_NOW">Comprar Agora</option>
-                                  <option value="LEARN_MORE">Saiba Mais</option>
-                                  <option value="SIGN_UP">Cadastre-se</option>
-                                  <option value="SUBSCRIBE">Assinar</option>
-                                  <option value="DOWNLOAD">Baixar</option>
-                                  <option value="CONTACT_US">Fale Conosco</option>
-                                </select>
-                              </div>
-                            </div>
-                          </section>
-                        </div>
-
-
+                  <StepWrapper>
+                    <div className="bg-slate-50/50 max-w-7xl mx-auto px-4 py-4 animate-fade-in">
+                      <div className="mb-4 bg-blue-50 text-blue-700 p-3 rounded-xl text-sm font-medium w-full">
+                        <strong>Dica do sistema:</strong> Escreva a copy, importe os arquivos e inicie o lançamento.
                       </div>
 
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                        {/* MAIN CARD (8 colunas) */}
+                        <div className="lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col">
+                          <div className="mb-4">
+                            <h2 className="text-2xl font-black text-blue-600">Criativos & Disparo</h2>
+                            <p className="text-sm font-medium text-slate-500 mt-1">Última etapa. Adicione as mídias e lance suas campanhas.</p>
+                          </div>
+
+                          <div className="space-y-6 flex-1">
+                            {/* Seção 1: Seleção de Mídias */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">1. Selecionar Mídias</h3>
+                              <div className="flex flex-col sm:flex-row gap-3">
+                                <button onClick={() => setIsModalCofreOpen(true)} className="flex-1 border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all cursor-pointer group flex flex-col items-center justify-center gap-2">
+                                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                    {IconCloud}
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Abrir Cofre</p>
+                                    <p className="text-[10px] font-semibold text-slate-500 mt-1">Biblioteca Nuvem</p>
+                                  </div>
+                                </button>
+
+                                <div className="flex-1 relative group cursor-pointer border-2 border-dashed border-slate-200 hover:border-blue-500 bg-slate-50 rounded-xl p-4 text-center transition-all flex flex-col items-center justify-center gap-2">
+                                  <input type="file" multiple accept="image/*,video/*" onChange={handleImagens} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                  <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-bold text-slate-900 uppercase tracking-widest">Upload PC</p>
+                                    <p className="text-[10px] font-semibold text-slate-500 mt-1">Arrastar Arquivos</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {imagens.length > 0 && (
+                                <div className="mt-4 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                  <h4 className="text-xs font-black text-slate-700 uppercase tracking-widest mb-2">Fila de Disparo ({imagens.length} Arquivos)</h4>
+                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    {imagens.map((file, idx) => (
+                                      <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-200 group">
+                                        {file.type.startsWith('video/') ? (
+                                          <video src={previewUrls[idx]} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                                        ) : (
+                                          <img src={previewUrls[idx]} alt="Preview" className="w-full h-full object-cover" />
+                                        )}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+                                        <span className="absolute bottom-1 left-2 right-2 text-[8px] font-mono text-white truncate z-10">{file.name}</span>
+                                        <button onClick={() => removerImagem(idx)} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20 text-[10px]">✕</button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Seção 2: Nomenclatura */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">2. Nomenclatura</h3>
+                              <div className="flex flex-col sm:flex-row gap-3">
+                                <button onClick={() => setRegraNomeacao('arquivo')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'arquivo' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'arquivo' ? 'border-blue-600' : 'border-slate-400'}`}>
+                                      {regraNomeacao === 'arquivo' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
+                                    </div>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'arquivo' ? 'text-blue-700' : 'text-slate-700'}`}>Nome do Arquivo</span>
+                                  </div>
+                                  <span className="text-[10px] text-slate-500 ml-6">Ex: video_venda.mp4</span>
+                                </button>
+                                <button onClick={() => setRegraNomeacao('sistema')} className={`flex-1 p-3 rounded-xl border-2 transition-all text-left flex flex-col gap-1 ${regraNomeacao === 'sistema' ? 'bg-blue-50 border-blue-600' : 'bg-slate-50 border-slate-200 hover:border-slate-300'}`}>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${regraNomeacao === 'sistema' ? 'border-blue-600' : 'border-slate-400'}`}>
+                                      {regraNomeacao === 'sistema' && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
+                                    </div>
+                                    <span className={`text-xs font-bold uppercase tracking-widest ${regraNomeacao === 'sistema' ? 'text-blue-700' : 'text-slate-700'}`}>Padrão Inteligente</span>
+                                  </div>
+                                  <span className="text-[10px] text-slate-500 ml-6">Ex: [AD 01] - Conversão</span>
+                                </button>
+                              </div>
+                            </section>
+                            <Separator className="my-6 bg-blue-500/30" />
+
+                            {/* Seção 3: Textos do Anúncio (Copy) */}
+                            <section>
+                              <h3 className="text-base font-bold text-slate-900 mb-2">3. Textos do Anúncio (Copy)</h3>
+                              <div className="space-y-4">
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Texto Principal (Copy)</label>
+                                  <textarea value={textoAnuncio} onChange={e => setTextoAnuncio(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all min-h-[80px] resize-y outline-none" placeholder="Escreva a copy persuasiva aqui..."></textarea>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="block text-sm font-bold text-slate-900 mb-1">Título (Headline)</label>
+                                    <input type="text" value={titulo} onChange={e => setTitulo(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Método Comprovado" />
+                                  </div>
+                                  <div>
+                                    <label className="block text-sm font-bold text-slate-900 mb-1">Descrição (Opcional)</label>
+                                    <input type="text" value={descricao} onChange={e => setDescricao(e.target.value)} className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-0 transition-all outline-none" placeholder="Ex: Mais de 10.000 alunos" />
+                                  </div>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-bold text-slate-900 mb-1">Botão de Ação (Call to Action)</label>
+                                  <Select.Root value={callToAction} onValueChange={setCallToAction}>
+                                    <Select.Trigger className="w-full flex items-center justify-between bg-slate-50 border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-medium text-slate-900 hover:border-blue-500 focus:border-blue-600 transition-all outline-none">
+                                      <Select.Value />
+                                      <Select.Icon><ChevronDownIcon className="text-gray-500" /></Select.Icon>
+                                    </Select.Trigger>
+                                    <Select.Portal>
+                                      <Select.Content className="overflow-hidden bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-slate-200 z-[999] animate-slide-up">
+                                        <Select.Viewport className="p-2">
+                                          {[
+                                            { val: "SHOP_NOW", label: "Comprar Agora" },
+                                            { val: "LEARN_MORE", label: "Saiba Mais" },
+                                            { val: "SIGN_UP", label: "Cadastre-se" },
+                                            { val: "SUBSCRIBE", label: "Assinar" },
+                                            { val: "DOWNLOAD", label: "Baixar" },
+                                            { val: "CONTACT_US", label: "Fale Conosco" }
+                                          ].map(item => (
+                                            <Select.Item key={item.val} value={item.val} className="relative flex items-center px-6 py-2 text-sm font-bold text-slate-700 rounded-lg hover:bg-blue-50 cursor-pointer outline-none data-[highlighted]:bg-blue-50 data-[highlighted]:text-blue-700 transition-colors">
+                                              <Select.ItemText>{item.label}</Select.ItemText>
+                                              <Select.ItemIndicator className="absolute left-2 text-blue-600"><CheckIcon /></Select.ItemIndicator>
+                                            </Select.Item>
+                                          ))}
+                                        </Select.Viewport>
+                                      </Select.Content>
+                                    </Select.Portal>
+                                  </Select.Root>
+                                </div>
+                              </div>
+                            </section>
+                          </div>
+
+
+                        </div>
+
+                      </div>
                     </div>
-                  </div>
+                  </StepWrapper>
                 )}
 
                 {(lancando || concluido || erroFinal) && (
@@ -1430,11 +1675,11 @@ export default function Home() {
                     </button>
                   ) : <div />}
                   {passoAtual < TOTAL_PASSOS ? (
-                    <button type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="px-8 py-3 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-30 rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+                    <PulsatingButton pulseColor="#2563eb" duration="2s" type="button" onClick={() => setPassoAtual(p => Math.min(p + 1, TOTAL_PASSOS))} disabled={!podeAvançar()} className="px-8 py-3 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-30 rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)]">
                       Continuar
-                    </button>
+                    </PulsatingButton>
                   ) : (
-                    <button type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] flex items-center gap-2">
+                    <PulsatingButton pulseColor="#4f46e5" duration="2s" type="button" onClick={handleLancar} disabled={!podeLancar || lancando} className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(37,99,235,0.3)] flex items-center gap-2">
                       {lancando ? (
                         <>
                           <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"></span>
@@ -1446,7 +1691,7 @@ export default function Home() {
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         </>
                       )}
-                    </button>
+                    </PulsatingButton>
                   )}
                 </div>
               </GlassPanel>

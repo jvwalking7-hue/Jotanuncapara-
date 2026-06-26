@@ -1,7 +1,10 @@
 import localFont from "next/font/local";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { Providers } from "./providers"; // Importando nosso novo arquivo
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const uberMove = localFont({
   src: [
@@ -37,7 +40,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-br"
-      className={`${geistSans.variable} ${geistMono.variable} ${uberMove.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, uberMove.variable, "font-sans", inter.variable)}
     >
       <body className={`min-h-full flex flex-col ${uberMove.className}`}>
         <Providers>
